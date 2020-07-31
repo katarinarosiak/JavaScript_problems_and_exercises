@@ -1,0 +1,31 @@
+{
+  "chooseLang": "Please choose language / Prosze wybierz jezyk: \n pol/eng",
+  "welcome": {
+    "eng": "Hello, Welcome to Calculator!",
+    "pol": "Hej! WItamy w kalkulatoze!"
+  },
+  "firstNum": {
+    "eng": "What's the first number?",
+    "pol": "Podaj pierwsza liczbe"
+  },
+  "notANum": {
+    "eng": "Hmm... that doesn't look like a valid number",
+    "pol": "Oj... To nie wyglada na liczbe. Sprobuj ponownie"
+  },
+  "secondNum": {
+    "eng": "what is the second number?",
+    "pol": "Podaj druga liczbe"
+  },
+  "operationMessage": {
+    "eng": "what operation would you like to perform?\n1) Add 2) Substract 3) Miltiply 4) Divide",
+    "pol": "Wybierza dzialanie, ktore chcesz przeprowadzic:\n1) Dodawanie 2) Odejmowanie 3) Mnozenie 4) Dzielenie"
+  },
+  "numOnly": {
+    "eng": "Please choose 1, 2, 3 or 4",
+    "pol": "Podaj tylko liczbe 1, 2, 3 albo 4"
+  },
+  "another": {
+    "eng": "Do you want to make another calculation? y/n ?",
+    "pol": "Chce chcesz wykonac nastepne dzialanie? \n Wpisz y jesli tak, wpisz n jesli nie."
+  }
+}
