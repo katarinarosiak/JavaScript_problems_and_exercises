@@ -62,17 +62,19 @@ function century(year) {
   return chooseAbbrev(Math.ceil(year / 100));
 }
 
-
-
 function chooseAbbrev(century) {
   let dictionary = {
     1: 'st',
     2: 'nd',
     3: 'rd',
-  }
-  // century = String(century);
+  };
+  let centuryString = String(century);
+  let lastTwoDigits = Number(centuryString.slice(centuryString.length - 2));
 
-  if (century < 10 || century > 20) {
+
+  if (lastTwoDigits > 10 && lastTwoDigits < 20) {
+    return century + 'th';
+  } else if (century < 10 || century > 20) {
     century = String(century);
     return century + dictionary[century[century.length - 1]];
   } else {
