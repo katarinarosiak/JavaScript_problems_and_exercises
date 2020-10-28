@@ -1,10 +1,13 @@
-// What Century is That?
+// /What Century is That?
 // Write a function that takes a year as input and returns the century. The return value should be a string that begins with the century number, and ends with 'st', 'nd', 'rd', or 'th' as appropriate for that number.
 
 // New centuries begin in years that end with 01. So, the years 1901 - 2000 comprise the 20th century.
 
 // Examples:
 
+
+
+// Copy Code
 console.log(century(2000));        // "20th"
 console.log(century(2001));        // "21st"
 console.log(century(1965));        // "20th"
@@ -15,69 +18,43 @@ console.log(century(1052));        // "11th"
 console.log(century(1127));        // "12th"
 console.log(century(11201));       // "113th"
 
-
-// PEDAC
-// UNDERSTAND THE PROBLEM: 
-// 1.
-// 2.
-// 3.
-// Input:
-// - num
-// Output:
-// - string
-// Rules:
-// - century in a year that begins with 01 
-// - 2000 - 20th , 2001 21st 
-// - according to the last letter add nd, th, st, or th abbreviation 
-//   -return 
-// Questions: 
-// -
-
-// EXAMPLES/TEST CASES:
-// i:
-// =>
-// o:
-// =>
-// MENTAL MODEL: 
-// *
-// DATA STRUCTURES: 
-// ALGORYTHM: 
-// - take a year and determin a century 
-//-  if < 100 => 1st
-// - 101 - 100 => 2nd 
-//
-//
-
-// Checklist:
-// - () ;
-// - names
-// -logic
-// - return
-
-// PSEUDOCODE:
-// CODE: 
+// 1st     10th   20th  101st
+// 2nd     11th   21st  102nd
+// 3rd     12th   22nd
+// 4th     13th   23rd
+// 5th     14th   24th
+// 6th     ..     ..
+// 7th
+// 8th
+// 9th
 
 
 function century(year) {
-  return chooseAbbrev(Math.ceil(year / 100));
+  let cent = Math.ceil(year / 100);
+
+
+  return findEnd(cent);
 }
 
-function chooseAbbrev(century) {
-  let dictionary = {
-    1: 'st',
-    2: 'nd',
-    3: 'rd',
-  };
-  let centuryString = String(century);
-  let lastTwoDigits = Number(centuryString.slice(centuryString.length - 2));
 
+function findEnd(num) {
+  let abr = 'th';
 
-  if (lastTwoDigits > 10 && lastTwoDigits < 20) {
-    return century + 'th';
-  } else if (century < 10 || century > 20) {
-    century = String(century);
-    return century + dictionary[century[century.length - 1]];
+  if (num % 100 === 11 || num % 100 === 12 || num % 100 === 13) {
+    abr = 'th'
   } else {
-    return century + 'th';
+    if (num % 10 === 1) abr = 'st';
+    if (num % 10 === 2) abr = 'nd';
+    if (num % 10 === 3) abr = 'rd';
   }
+  return num + abr;
 }
+
+
+// function findAbr(num) {
+//     let abr = '';  
+//   if (num >= 4 && num <= 19) abr = th;
+
+
+//   return abr; 
+// }

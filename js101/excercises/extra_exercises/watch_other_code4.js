@@ -125,3 +125,14 @@ console.log(common_chars(['aabbaa', 'cccdddd', 'eeffee', 'ggrrrr'])) // == []
 
 
 console.log(common_chars(['ab', 'bc']))
+
+
+
+PROBLEM STATEMENT:
+// In this Kata, you will be given an array of arrays and your task will be to return the number of unique arrays that can be formed by picking exactly one element from each subarray.
+
+
+// console.log(solve([[1,2],[4],[5,6]])) //,4);
+// console.log(solve([[1,2],[4,4],[5,6,6]])) //,4);
+// console.log(solve([[1,2],[3,4],[5,6]])) //,8);
+// console.log(solve([[1,2,3],[3,4,6,6,7],[8,9,10,12,5,6]])) //,72);
