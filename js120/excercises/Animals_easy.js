@@ -23,23 +23,17 @@ class Animal {
 
 class Cat extends Animal {
   constructor(name, age, status) {
-    super(name, age, status);
-    this.legs = 4;
-    this.species = "cat";
-    this.status = status;
-
+    super(name, age, 4, 'cat', status);
   }
   introduce() {
-    return `Hello, my name is ${this.name} and I am ${this.age} years old and ${this.status}. Meow meow!`;
+    return `${super.introduce()} Meow meow!`
   }
 }
 
 class Dog extends Animal {
   constructor(name, age, status, master) {
-    super(name, age, status, master);
-    this.legs = 4;
-    this.species = "dog";
-    this.status = status;
+    super(name, age, 4, 'dog', status, master);
+    this.master = master;
   }
   greetMaster() {
     console.log(`Hello ${this.master}. Woof, woof!.`)
