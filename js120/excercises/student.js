@@ -60,7 +60,7 @@ function createStudent(name, year) {
 
 let foo = createStudent('Foo', '1st');
 foo.info();
-//= "Foo is a 1st year student"
+//= "Foo is a 1st year student"  
 foo.listCourses();
 // = [];
 foo.addCourse({ name: 'Math', code: 101 });
