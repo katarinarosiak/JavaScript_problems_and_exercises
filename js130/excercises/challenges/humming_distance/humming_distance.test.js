@@ -38,7 +38,7 @@ describe('DNA', () => {
   });
 
   test('input is not capital letters or different data type', () => {
-    expect(new DNA('__$%#').toThrow();
+    expect(new DNA('__$%#').toThrow());
   });
 
   test("doesn't shorten original string", () => {
