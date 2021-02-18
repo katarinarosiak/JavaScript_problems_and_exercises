@@ -4,11 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "gitHub": "git add --all && git commit -m \"excercises\" "
   },
-  "dependencies": {
-    "eslint": "7.19.0"
-  },
+  "dependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/katarinarosiak/launch_school_core.git"
@@ -18,5 +17,10 @@
   "bugs": {
     "url": "https://github.com/katarinarosiak/launch_school_core/issues"
   },
-  "homepage": "https://github.com/katarinarosiak/launch_school_core#readme"
+  "homepage": "https://github.com/katarinarosiak/launch_school_core#readme",
+  "devDependencies": {
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.20.0",
+    "eslint-cli": "^1.1.1"
+  }
 }
