@@ -4,11 +4,11 @@
 // All given inputs are in lowercase letters a-z.
 // =end
 
-// puts common_prefix(["flower", "flow", "fliwht"]) == "fl"
-// puts common_prefix(["dog", "racecar", "car"]) == ""
-// puts common_prefix(["interspecies", "interstellar", "interstate"]) == "inters"
-// puts common_prefix(["throne", "dungeon"]) == ""
-// puts common_prefix(["throne", "throne"]) == "throne"
+// console.log(common_prefix(["flower", "flow", "fliwht"]) == "fl");
+// console.log(common_prefix(["dog", "racecar", "car"]) == "");
+// console.log(common_prefix(["interspecies", "interstellar", "interstate"]) == "inters");
+// console.log(common_prefix(["throne", "dungeon"]) == "");
+// console.log(common_prefix(["throne", "throne"]) == "throne");
 
 
 function common_prefix(arr) {
@@ -27,3 +27,55 @@ function common_prefix(arr) {
 }
 
 console.log(common_prefix(["interspecies", "interstellar", "interstate"]));
+
+
+// function common_prefix(arr){
+//   let arrPrefix = [];
+  
+  
+//   for(let index = 0; index < arr[0].length; index += 1) {
+//     let currentSlice = arr[0].slice(0, index + 1);
+    
+//     let answer = arr.every((ele) =>{
+//      return ele.includes(currentSlice);
+//       });
+    
+//     if (answer === true) {
+//     arrPrefix.push(currentSlice);
+//     }
+//   }
+  
+
+//   return arrPrefix[arrPrefix.length - 1];
+// }
+
+console.log(common_prefix(["flower", "flow", "fliwht"]));
+
+
+//without every method 
+function common_prefix(arr){
+   let arrPrefix = [];
+  
+  
+  for(let index = 0; index < arr[0].length; index += 1) {
+    let currentSlice = arr[0].slice(0, index + 1);
+    
+    if (checkIfExistInEvery(arr, currentSlice)) {
+       arrPrefix.push(currentSlice); 
+    }    
+  }  
+ 
+  return arrPrefix[arrPrefix.length - 1];
+}  
+
+
+function checkIfExistInEvery(arr, str) {
+  
+  for (let index = 0; index < arr.length; index++) {
+    if (!arr[index].includes(str)) {
+      return false;
+    }  
+  }  
+  return true;
+}  
+
