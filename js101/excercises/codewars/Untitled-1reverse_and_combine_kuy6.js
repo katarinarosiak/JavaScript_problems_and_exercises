@@ -12,7 +12,7 @@
 /// Input:  "abc def"
 // Output: "cbafed"
 
-// Input:  "abc def ghi 123"
+// Input:  "abc def ghi 123" 
 // Output: "defabc123ghi"
 
 // Input:  "abc def gh34 434ff 55_eri 123 343"

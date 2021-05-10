@@ -10,6 +10,21 @@
 // console.log(common_prefix(["throne", "dungeon"]) == "");
 // console.log(common_prefix(["throne", "throne"]) == "throne");
 
+1. iterate through arr
+2. make slice first letter check if exist in all the elements
+3. if no return false
+4. if yes continue and make the slincebigger 
+
+
+function common_prefix(arr){
+  for (let i = 0; i < arr.length; i++){
+    let sliced = arr[i].slice(0, i+1)
+    return arr.every(el => arr.includes(sliced))
+  }
+}
+
+
+
 
 function common_prefix(arr) {
   let firstWord = arr[0];
