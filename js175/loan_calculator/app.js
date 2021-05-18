@@ -1,8 +1,17 @@
 const HTTP = require('http'); //import http module
-const URL = require('url').URL;  //import url module 
-const PORT = 3000;  //assign port 3000 to PORT variable 
+const URL = require('url').URL;  //import url module
+const PORT = 3000;  //assign port 3000 to PORT variable
+const FS = require('fs');
+const PATH = require('path'); //On line 3 we include the Node path module. This provides us with access to the path.extname() method which we call on line 136. This method returns the file extension, if present, from a path passed to it as an argument. By assigning this file extension to a variable named fileExtension, we can then set the correct value for Content-Type on line 140, from a pre-defined list of MIME_TYPES
 const HANDLEBARS = require('handlebars');  //import handlebars module (templateing engine)
 const APR = 5;
+const MIME_TYPES = {
+  '.css': 'text/css',
+  '.js': 'application/javascript',
+  '.jpg': 'image/jpeg',
+  '.png': 'image/png',
+  '.ico': 'image/x-icon'
+};
 //create a template html file (+CSS) and use syntax {{placeholder}} for the variables 
 const LOAN_OFFER_SOURCE = `  
 <!DOCTYPE html>
@@ -10,39 +19,7 @@ const LOAN_OFFER_SOURCE = `
   <head>
     <meta charset="utf-8">
     <title>Loan Calculator</title>
-    <style type="text/css">
-      body {
-        background: rgba(250, 250, 250);
-        font-family: sans-serif;
-        color: rgb(50, 50, 50);
-      }
-
-      article {
-        width: 100%;
-        max-width: 40rem;
-        margin: 0 auto;
-        padding: 1rem 2rem;
-      }
-
-      h1 {
-        font-size: 2.5rem;
-        text-align: center;
-      }
-
-      table {
-        font-size: 1.5rem;
-      }
-      th {
-        text-align: right;
-      }
-      td {
-        text-align: center;
-      }
-      th,
-      td {
-        padding: 0.5rem;
-      }
-    </style>
+    <link rel="stylesheet" href="/assets/css/styles.css">
   </head>
   <body>
     <article>
@@ -88,54 +65,12 @@ const LOAN_FORM_SOURCE = `<!DOCTYPE html>
   <head>
     <meta charset="utf-8">
     <title>Loan Calculator</title>
-    <style type="text/css">
-      body {
-        background: rgba(250, 250, 250);
-        font-family: sans-serif;
-        color: rgb(50, 50, 50);
-      }
-
-      article {
-        width: 100%;
-        max-width: 40rem;
-        margin: 0 auto;
-        padding: 1rem 2rem;
-      }
-
-      h1 {
-        font-size: 2.5rem;
-        text-align: center;
-      }
-
-      form,
-      input {
-        font-size: 1.5rem;
-      }
-      form p {
-        text-align: center;
-      }
-      label,
-      input {
-        display: block;
-        width: 100%;
-        padding: 0.5rem;
-        margin-top: 0.5rem;
-      }
-      input[type="submit"] {
-        width: auto;
-        margin: 1rem auto;
-        cursor: pointer;
-        color: #fff;
-        background-color: #01d28e;
-        border: none;
-        border-radius: 0.3rem;
-      }
-    </style>
+    <link rel="stylesheet" href="/assets/css/styles.css">
   </head>
   <body>
     <article>
       <h1>Loan Calculator</h1>
-      <form action="/loan-offer" method="get">
+      <form action="/loan-offer" method="post">
         <p>All loans are offered at an APR of {{apr}}%.</p>
         <label for="amount">How much do you want to borrow (in dollars)?</label>
         <input type="number" name="amount" value="">
@@ -159,7 +94,7 @@ function render(template, data) {
 
 //get path from the URL (we will interpert it later on)
 function getPathname(path) {
-  let myURL = new URL(path, `http://localhost:${PORT}`);
+  const myURL = new URL(path, `http://localhost:${PORT}`);
   return myURL.pathname;
 }
 
@@ -175,7 +110,7 @@ function getParameters(myURL) {
 }
 
 //this function takes params object and returns a new object containing all the data that will be needed for the template. (APR, amount, amountIncrement etc.)
-function generateOfferHtml(params, APR) {
+function generateOfferHtml(params) {
   let data = {};
 
   data.amount = params.amount;
@@ -184,7 +119,7 @@ function generateOfferHtml(params, APR) {
   data.duration = params.duration;
   data.durationIncrement = data.duration + 1;
   data.durationDecrement = data.duration - 1;
-  data.apR = APR;
+  data.apr = APR;
   data.payment = getMonthlyPayment(data.amount, data.duration, APR);
   return data;
 }
@@ -205,30 +140,37 @@ function countMonthlyPayment(loanAmount, monthlyInterestRate, loanDuration) {
 const SERVER = new HTTP.createServer((req, res) => {
   let method = req.method; //get the method used 
   let path = req.url; //get the URL path
-  let pathName = getPathname(path);
-
+  let pathname = getPathname(path);
+  let fileExtension = PATH.extname(pathname);
   const myURL = new URL(path, `http://localhost:${PORT}`);  //
   let params = getParameters(myURL);
 
   //Favicon.ico is the icon that gets shown on the left side of the tab of a web page.To have one in your domain, just save one favicon.ico in your root folder. We only want to request info that is not for favicon
 
-  if (pathName === '/') {
-    let content = render(LOAN_FORM_TEMPLATE, { apr: APR });
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'html');
-    res.write(`${content}\n`);
-    res.end();
-  } else if (pathName === '/loan-offer') {
-    let data = generateOfferHtml(params, APR);
-    let content = render(LOAN_OFFER_TEMPLATE, data);
-    res.setHeader('Content-Type', 'html');
-    res.write(`${content}\n`);
-    res.end();
-  } else {
-    res.statusCode = 400;
-    res.end();
-  }
-
+  FS.readFile(`./public${pathname}`, (err, data) => {
+    if (data) {
+      res.setHeader('Content-Type', `${MIME_TYPES[fileExtension]}`)
+      res.statusCode = 200;
+      res.write(`${data}\n`);
+      res.end();
+    } else if (pathname === '/') {
+      let content = render(LOAN_FORM_TEMPLATE, { apr: APR });
+      res.statusCode = 200;
+      res.setHeader('Content-Type', 'text/html');
+      res.write(`${content}\n`);
+      res.end();
+    } else if (pathname === '/loan-offer') {
+      let data = generateOfferHtml(params);
+      let content = render(LOAN_OFFER_TEMPLATE, data);
+      res.statusCode = 200;
+      res.setHeader('Content-Type', 'text/html');
+      res.write(`${content}\n`);
+      res.end();
+    } else {
+      res.statusCode = 400;
+      res.end();
+    }
+  })
 });
 //In the above code we also pass an optional callback to listen which simply logs Server listening on port, followed by the port number, to the console.
 SERVER.listen(PORT, () => {
