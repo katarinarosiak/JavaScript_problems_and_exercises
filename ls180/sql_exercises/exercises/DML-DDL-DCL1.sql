@@ -113,4 +113,12 @@ Does the following statement use the DDL or DML component of SQL?
 Copy Code
 DROP DATABASE xyzzy;
 
-The following statement uses DDL component of SQL since the "DROP DATABASE" command remves the entite database thus alterning the definition of the data. , even though the data itself is being removed at the same time. This is only considered as a side effect.  
+The following statement uses DDL component of SQL since the "DROP DATABASE" command remves the entite database thus alterning the definition of the data. , even though the data itself is being removed at the same time. This is only considered as a side effect. 
+
+DML/DDL/DCL Part 10
+Does the following statement use the DDL or DML component of SQL?
+
+Copy Code
+CREATE SEQUENCE part_number_sequence;
+
+THe following statement uses 
