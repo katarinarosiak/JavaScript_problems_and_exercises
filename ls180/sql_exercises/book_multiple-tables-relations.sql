@@ -107,9 +107,9 @@ CREATE TABLE products (
 
 INSERT INTO products (product_name, product_cost,product_type, loyalty_points)
   VALUES ("LS Burger",	3.00,	"Burger",	10),
-  ("LS Cheeseburger",	3.50	"Burger"	15),
-  ("LS Chicken Burger"	4.50	"Burger"	20),
-  ("LS Double Deluxe Burger"	6.00	"Burger"	30);
+  ("LS Cheeseburger",	3.50,	"Burger",	15),
+  ("LS Chicken Burger",	4.50,	"Burger",	20),
+  ("LS Double Deluxe Burger",	6.00,	"Burger",	30);
 
 -- 6. To associate customers with products, we need to do two more things:
 
