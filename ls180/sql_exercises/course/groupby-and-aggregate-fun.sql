@@ -41,3 +41,4 @@ SELECT (year / 10 * 10) as decade, genre, string_agg(title, ', ') as films
 
   SELECT genre, sum(duration) as total_duration 
     FROM films GROUP BY genre  ORDER BY total_duration, genre ASC;
+
