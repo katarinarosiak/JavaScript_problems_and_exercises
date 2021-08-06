@@ -31,29 +31,39 @@ SELECT books.id, author, string_agg(name, ', ') as categories
 
 
 
-CREATE TABLE employees (
-  id serial PRIMARY KEY,
-  name varchar(200),
-  position varchar(200),
-  department varchar(200),
-  salary numeric
-);
 
-INSERT INTO employees (name, position, department, salary)
-  VALUES ('Maggan Ericsson', 'Accountant', 'Accounting', 70.000),
-  ('Magnuss Jorgenstein', 'Accountant', 'Accounting', 70.000),
-  ('Katarina Ingersson', 'Deputy Director', 'Management', 120.000),
-  ('John Fergusson', 'CEO', 'Management', 150.000),
-  ('Virginia Johnson', 'Sales-assistant', 'Sales', 60.000),
-  ('Tom Smith', 'Sales Manager', 'Sales', 100.000),
-  ('Gregory Johnson', 'Salesperson', 'Sales', 70.000),
-  ('Victoria Correra', 'Salesperson', 'Sales', 70.000),
-  ('Katarina Ingersson', 'Deputy Director', 'Management', 120.000),
-  ('John Fergusson', 'CEO', 'Management', 150.000);
+-- 3. Write SQL statements to insert the following new books into the database. What do you need to do to ensure this data fits in the database?
 
-  SELECT department FROM employees GROUP BY department;
+ALTER TABLE books
+  ALTER COLUMN title TYPE text;
 
-  SELECT department, SUM(salary) FROM employees GROUP BY department;
+ALTER TABLE books
+  ALTER COLUMN author TYPE text;
+
+INSERT INTO books (author, title)
+  VALUES ('Lynn Sherr',	'Sally Ride: America''s First Woman in Space'),
+  ('Charlotte Brontë',	'Jane Eyre'),
+  ('Meeru Dhalwala and Vikram Vij',	'Vij''s: Elegant and Inspired Indian Cuisine');
+
+INSERT INTO categories (name)
+  VALUES ('Space Exploration'), ('Cookbook'), ('South Asia');
+
+INSERT INTO books_categories (book_id, category_id)
+  VALUES (4, 5),(4, 1), (4, 7), (5, 2), (5, 4), (6, 8), (6, 1), (6,9);
+
+-- 4. Write a SQL statement to add a uniqueness constraint on the combination of columns book_id and category_id of the books_categories table. This constraint should be a table constraint; so, it should check for uniqueness on the combination of book_id and category_id across all rows of the books_categories table.
+
+ALTER TABLE books_categories
+  ADD UNIQUE (book_id, category_id);  
 
 
-SELECT string_agg(name, ', '), department, SUM(salary) FROM employees GROUP BY department;
+-- Write a SQL statement that will return the following result:
+
+SELECT categories.name, COUNT(categories.id) as book_count, string_agg(books.title, ', ') as book_titles
+  FROM categories 
+  INNER JOIN books_categories
+  ON books_categories.category_id = categories.id 
+  INNER JOIN books 
+  ON books.id = books_categories.book_id
+    GROUP BY categories.name
+    ORDER BY categories.name;
