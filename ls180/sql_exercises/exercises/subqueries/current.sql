@@ -1312,6 +1312,54 @@
 
 -- CREATE INDEX bids_index ON bids (bidder_id, item_id);
 
-\copy biders FROM 'bidders.csv' WITH header CSV;
-\copy items FROM 'items.csv' WITH HEADER CSV;
-\copy bids FROM 'bids.csv' WITH HEADER CSV;
+-- \copy bidders FROM 'bidders.csv' WITH header CSV;
+-- \copy items FROM 'items.csv' WITH HEADER CSV;
+-- \copy bids FROM 'bids.csv' WITH HEADER CSV;
+
+-- SELECT * FROM bids;
+
+-- SELECT name as "Bid on Items" 
+--   FROM items
+--   WHERE id NOT IN (SELECT item_id 
+--                 FROM bids);
+
+
+-- SELECT name 
+--   FROM bidders 
+--     WHERE EXISTS (SELECT 1
+--                             FROM bids
+--                             WHERE bids.bidder_id = bidders.id);
+
+-- finds the largest 
+-- number of bids from an individual bidder.
+
+-- SELECT MAX(count) 
+--   FROM (SELECT COUNT(item_id)
+--         FROM bids
+--         GROUP BY bidder_id) as bid;
+
+-- SELECT name, (SELECT COUNT(id)
+--               FROM bids
+--               WHERE items.id = bids.item_id) 
+--   FROM items; 
+
+-- SELECT item_id, COUNT(id)
+--   FROM bids
+--   GROUP BY item_id; 
+
+-- SELECT name, (SELECT max(pop) FROM cities WHERE cities.state = states.name)
+--     FROM states;
+
+-- SELECT items.id 
+--   FROM items 
+--     SELF JOIN items 
+--       ON items.id = items.id
+--         WHERE items.name LIKE 'Painting'
+--           SELF JOIN items 
+--             ON ON items.id = items.id
+--               WHERE items.initial_price = 100.00; 
+
+
+\l
+
+

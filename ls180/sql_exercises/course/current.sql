@@ -1110,11 +1110,203 @@
 --   DROP FOREIGN KEY (categories_id);
 
 
-SELECT books.id, books.author, string_agg(categories.name, ', ') as categories
-  FROM books 
-    JOIN books_categories 
-      ON books.id = books_categories.books_id
-         JOIN categories 
-          ON categories.id = books_categories.category_id
-          GROUP BY books.author, books.id;
+-- SELECT books.id, books.author, string_agg(categories.name, ', ') as categories
+--   FROM books 
+--     JOIN books_categories 
+--       ON books.id = books_categories.books_id
+--          JOIN categories 
+--           ON categories.id = books_categories.category_id
+--           GROUP BY books.author, books.id;
   
+-- SELECT books.author, category_id 
+-- FROM books
+--   JOIN books_categories
+--     ON books_id = books.id;
+
+-- ALTER TABLE books_categories
+--   ALTER COLUMN book_id SET NOT NULL;
+
+-- ALTER TABLE books_categories
+--   ALTER COLUMN category_id SET NOT NULL;
+
+-- ALTER TABLE books_categories
+--   DROP CONSTRAINT "books_categories_book_id_fkey",
+--   ADD CONSTRAINT "books_categories_book_id_fkey"
+--   FOREIGN KEY ("book_id")
+--   REFERENCES books(id)
+--   ON DELETE CASCADE;
+
+-- ALTER TABLE books_categories
+--   DROP CONSTRAINT "books_categories_category_id_fkey",
+--   ADD CONSTRAINT "books_categories_category_id_fkey"
+--   FOREIGN KEY ("category_id")
+--   REFERENCES categories(id)
+--   ON DELETE CASCADE;
+
+
+-- SELECT books.id, books.author, string_agg(categories.name, ', ') as categories
+--   FROM books
+--     JOIN books_categories
+--       ON books.id = book_id
+--         JOIN categories 
+--           ON categories.id = category_id
+--           GROUP BY  books.author, books.id
+--           ORDER BY books.id;
+
+
+-- INSERT INTO books (title, author) 
+--   VALUES ('Lynn Sherr', 	'Sally Ride: America''s First Woman in Space'),
+--   ('Charlotte Brontë'	,'Jane Eyre'),
+--   ('Meeru Dhalwala and Vikram Vij'	,'Vij''s: Elegant and Inspired Indian Cuisine');
+
+-- INSERT INTO categories (name)
+--   VALUES ('Space Exploration'), ('Cookbook'), ('South Asia');
+
+-- INSERT INTO books_categories (book_id, category_id)
+--   ();
+
+-- SELECT * FROM books;
+
+-- ALTER TABLE books 
+--   ALTER COLUMN title TYPE varchar(200),
+--   ALTER COLUMN author TYPE varchar(200);
+-- \d books
+
+--  id |    name    
+-- ----+------------
+--   1 | Nonfiction
+--   2 | Fiction
+--   3 | Fantasy
+--   4 | Classics
+--   5 | Biography
+--   6 | Physics
+-- SELECT * FROM books;
+
+--  id |              title              |                   author                   
+-- ----+---------------------------------+--------------------------------------------
+--   1 | A Tale of Two Cities            | Charles Dickens
+--   2 | Harry Potter                    | J. K. Rowling
+--   3 | Einstein: His Life and Universe | Walter Isaacson
+--   4 | Lynn Sherr                      | Sally Ride: America's First Woman in Space
+--   5 | Charlotte Brontë                | Jane Eyre
+--   6 | Meeru Dhalwala and Vikram Vij   | Vij's: Elegant and Inspired Indian Cuisine
+--   7 | Lynn Sherr                      | Sally Ride: America's First Woman in Space
+--   8 | Charlotte Brontë                | Jane Eyre
+--   9 | Meeru Dhalwala and Vikram Vij  
+
+-- INSERT INTO books_categories (book_id, category_id)
+--   VALUES
+--   (7, 5), (7, 1), (7, 7),
+--   (8, 2), (8, 4),
+--   (9, 8), (9, 1), (9, 9);
+
+-- SELECT * FROM categories;
+
+-- ALTER TABLE books_categories 
+--   ADD CONSTRAINT unique_category_and_book 
+--     UNIQUE (book_id, category_id);
+
+-- SELECT categories.name, count(books.id) as book_count, string_agg(books.title, ', ') as book_titles
+--   FROM categories 
+--     JOIN books_categories
+--       ON category_id = categories.id
+--         JOIN books 
+--           ON books.id = book_id
+--             GROUP BY categories.name
+--             ORDER BY categories.name;
+
+
+-- CREATE DATABASE movies;
+
+-- \c movies
+
+-- \dt
+
+
+-- CREATE TABLE directors_films (
+--   id serial PRIMARY KEY,
+--   film_id int NOT NULL REFERENCES films (id)
+--     ON DELETE CASCADE,
+--   director_id int NOT NULL REFERENCES directors (id)
+--     ON DELETE CASCADE
+-- );
+
+-- INSERT INTO directors_films (film_id, director_id)
+--   VALUES (1,1), (2, 2), (3, 3), (4, 4), (5, 5), (6, 6),
+--   (7, 3), (8, 7), (9, 8), (10, 4);
+
+
+--   ALTER TABLE films 
+--     DROP COLUMN director_id; 
+
+-- SELECT * FROM directors_films;
+
+
+-- SELECT title, directors.name
+--   FROM directors
+--     JOIN directors_films
+--       ON director_id = directors.id
+--         JOIN films 
+--           ON films.id = film_id
+--           ORDER BY title; 
+
+-- INSERT INTO directors (name)
+--   VALUES ('Joel Coen'), ('Ethan Coen'), ('Frank Miller'),
+--   ('Robert Rodriguez');
+
+-- INSERT INTO films (title, "year", genre, duration)
+--   VALUES ('Fargo',	1996,	'comedy',	98),
+--   ('No Country for Old Men'	,2007,	'western',	122), 
+--   ('Sin City',	2005,	'crime',	124), 
+--   ('Spy Kids'	,2001,	'scifi'	,88);
+
+-- INSERT INTO directors_films (film_id, director_id)
+--   VALUES ()
+--   ();
+
+--   1 | John McTiernan
+--   2 | Michael Curtiz
+--   3 | Francis Ford Coppola
+--   4 | Michael Anderson
+--   5 | Tomas Alfredson
+--   6 | Mike Nichols
+--   7 | Sidney Lumet
+--   8 | Penelope Spheeris
+--   9 | Joel Coen
+--  10 | Ethan Coen
+--  11 | Frank Miller
+--  12 | Robert Rodriguez
+-- (12 rows)
+
+-- ----+---------------------------+------+-----------+----------
+--   1 | Die Hard                  | 1988 | action    |      132
+--   2 | Casablanca                | 1942 | drama     |      102
+--   3 | The Conversation          | 1974 | thriller  |      113
+--   4 | 1984                      | 1956 | scifi     |       90
+--   5 | Tinker Tailor Soldier Spy | 2011 | espionage |      127
+--   6 | The Birdcage              | 1996 | comedy    |      118
+--   7 | The Godfather             | 1972 | crime     |      175
+--   8 | 12 Angry Men              | 1957 | drama     |       96
+--   9 | Wayne's World             | 1992 | comedy    |       95
+--  10 | Let the Right One In      | 2008 | horror    |      114
+--  11 | Fargo                     | 1996 | comedy    |       98
+--  12 | No Country for Old Men    | 2007 | western   |      122
+--  13 | Sin City                  | 2005 | crime     |      124
+--  14 | Spy Kids                  | 2001 | scifi     |       88
+
+
+-- INSERT INTO directors_films (film_id, director_id)
+--   VALUES (11, 9), (12, 9), (12, 10), (13, 11), (13, 12), (14, 12);
+  
+  -- SELECT films.title, directors.name
+  -- FROM films
+  --   INNER JOIN directors_films ON directors_films.film_id = films.id
+  --   INNER JOIN directors ON directors.id = directors_films.director_id
+  -- ORDER BY films.title ASC;
+
+  -- SELECT directors.name as director, COUNT(film_id) as films
+  --   FROM directors_films
+  --     JOIN directors 
+  --       ON directors.id = director_id
+  --   GROUP BY directors.name
+  --   ORDER BY films DESC, director ASC;
