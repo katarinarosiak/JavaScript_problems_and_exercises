@@ -87,21 +87,30 @@ let negativeWords = ['die', 'heartache', 'death', 'despise', 'scorn', 'weary', '
 
 // The sentiment of the text is Negative.
 
+let positiveRegex = /\bfortunes?\b|\bdream(s|t|ed)?\b|love(s|d)?\b|respect(s|ed)?\b|\bpatien(ce|t)?\b|\bdevout(ly)?\b|\bnobler?\b|\bresolut(e|ion)?\b/gi;
+let negativeRegex = /\bdie(s|d)?\b|\bheartached?\b|death|despise(s|d)?\b|\bscorn(s|ed)?\b|\bweary\b|\btroubles?\b|\boppress(es|ed|or('s)?)?\b/gi;
+
 
 function sentiment(text) {
-  let wordList = text.toLowerCase().match(/[a-z']+/g);
-  let positiveSentiments = wordList.filter(word => positiveWords.includes(word)); 
-  let negativeSentiments = wordList.filter(word => negativeWords.includes(word));
-  
+  let positiveSentiments = text.match(positiveRegex).map(word => word.toLowerCase());
+  let negativeSentiments = text.match(negativeRegex).map(word => word.toLowerCase());
+
+
   logSentimentInfo(positiveSentiments, negativeSentiments);
 };
 
+
+// function getMatches(text, wordArr) {
+//   let joined = wordArr.join('\\W|\\W');
+//   let rgx = new RegExp(`(\\W${joined}\\W)`, 'gi');
+//   return text.match(rgx);
+// };
 
 function logSentimentInfo(positiveSentiments, negativeSentiments) {
   let positiveCountInfo = `There are ${positiveSentiments.length} positive words in the text.`
   let positiveSentimentsFound = `Positive sentiments: ${positiveSentiments.join(', ')}`;
   let negativeCountInfo = `There are ${negativeSentiments.length} negative words in the text.`
-  let negativeSetimentsFound = `Negative sentiments: ${negativeSentiments.join(', ')}\n`;
+  let negativeSetimentsFound = `Negative sentiments: ${negativeSentiments.join(', ')}`;
   
   console.log(positiveCountInfo);
   console.log(positiveSentimentsFound);
@@ -113,11 +122,11 @@ function logSentimentInfo(positiveSentiments, negativeSentiments) {
 
 function determineSentiment(positiveCount, negativeCount) {
   if (positiveCount > negativeCount) {
-    return 'The sentiment of the text is positive.';
+    return 'The sentiment of the text is Positive.';
   } else if (positiveCount < negativeCount) {
-    return 'The sentiment of the text is negative.';
+    return 'The sentiment of the text is Negative.';
   } else {
-    return 'The sentiment of the text is neutral.';
+    return 'The sentiment of the text is Neutral.';
   }
 }
 
