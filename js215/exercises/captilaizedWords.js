@@ -19,4 +19,3 @@ function wordCap(string) {
   return string.toLowerCase()
     .replace(/\b\w(?!\w+")/g, match => match.toUpperCase());
 }
-
