@@ -17,12 +17,6 @@ console.log(matrix);         // [[1, 5, 8], [4, 7, 2], [3, 9, 6]]
 
 
 
-
-function transpose(matrix) {
-  return matrix.map((innerArr, i) => innerArr.map(((el, y) => matrix[y][i])));
-}
-
-
 // [
 //   [1, 2, 3],
 //   [4, 5, 6],
