@@ -62,7 +62,6 @@ function combineArrays(...arrays) {
   
   arrays.forEach((innerArr, i) => innerArr.forEach((el, y) => {
     finalArr[y].push(el === undefined ? '*' : el);
-
   }))
   return finalArr;
 };  
