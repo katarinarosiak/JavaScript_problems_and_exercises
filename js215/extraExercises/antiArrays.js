@@ -43,22 +43,22 @@
 // - if the length diffenretnt  return false 
 // - if they are the same => false 
 // - get two elements:
-     // - ewmove duplicates from both 
-     // - if  any array has length > 2 return false 
-     // - choose idx 0 from arr1, and idx 2 from arr 1 and save 
+// - ewmove duplicates from both 
+// - if  any array has length > 2 return false 
+// - choose idx 0 from arr1, and idx 2 from arr 1 and save 
 // - check if the elemnts are switched 
-     // - iterate through the both arrays incremnt by 1
-     // - take on ele eahc from each array 
-     // - check if elements are the same 
-     //   - if yes return false 
+// - iterate through the both arrays incremnt by 1
+// - take on ele eahc from each array 
+// - check if elements are the same 
+//   - if yes return false 
 // - return true
 
 
 function isAntiArray(arr1, arr2) {
   if ((arr1.length === 0 || arr2.length === 0) || (arr1.length !== arr2.length)) return false;
-  let remvedDupl1 = removeDupli(arr1);  
+  let remvedDupl1 = removeDupli(arr1);
   if (remvedDupl1.sort().join('') !== removeDupli(arr2).sort().join('')) return false
-  
+
   return arr1.every((el, idx) => el !== arr2[idx]);
 }
 
@@ -72,17 +72,23 @@ function removeDupli(arr) {
 console.log(isAntiArray(["1", "0", "0", "1"], ["0", "1", "1", "0"]) === true);
 console.log(isAntiArray(["apples", "bananas", "bananas"], ["bananas", "apples", "apples"]))// === true);
 
+//different data types:
+console.log(isAntiArray([undefined, NaN, undefined], [NaN, undefined, NaN]))// === true);
+
 // //more than two data types 
 console.log(isAntiArray([3.14, true, 3.14], [3.14, false, 3.14]) === false);
-console.log(isAntiArray([true, false, 0], [false,true, 1]) === false);
+console.log(isAntiArray([true, false, 0], [false, true, 1]) === false);
 
 // // //length is different 
-console.log(isAntiArray(["1", "0", "0", "1", "0"], ["0", "1", "1", "0"]) ===  false); 
+console.log(isAntiArray(["1", "0", "0", "1", "0"], ["0", "1", "1", "0"]) === false);
 
 // // //one or more empty arr 
 console.log(isAntiArray([], []) === false);
-console.log(isAntiArray([], [1,2,3]) === false);
+console.log(isAntiArray([], [1, 2, 3]) === false);
 
 // // //places are not switched
 console.log(isAntiArray([3.14, true, 3.14], [3.14, true, 3.14]) === false);
-console.log(isAntiArray([1,2,1], [1,1,2]) === false);
+console.log(isAntiArray([1, 2, 1], [1, 1, 2]) === false);
+
+//other data types:
+console.log(isAntiArray({}, 1) === null);
