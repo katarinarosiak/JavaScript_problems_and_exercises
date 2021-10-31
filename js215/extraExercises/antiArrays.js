@@ -6,7 +6,7 @@
 
 // isAntiArray(["apples", "bananas", "bananas"], ["bananas", "apples", "apples"]) ➞ true
 
-// isAntiArray([3.14, True, 3.14], [3.14, False, 3.14]) ➞ false
+// isAntiArray([3.14, true, 3.14], [3.14, false, 3.14]) ➞ false
 // Notes
 // All tests will include only two different elements.
 
@@ -72,8 +72,22 @@ function removeDupli(arr) {
 console.log(isAntiArray(["1", "0", "0", "1"], ["0", "1", "1", "0"]) === true);
 console.log(isAntiArray(["apples", "bananas", "bananas"], ["bananas", "apples", "apples"]))// === true);
 
+//return new arrays
+let arr1 = [1, 0, 1];
+let arr2 = [0, 1, 0];
+console.log(isAntiArray(arr1, arr2));
+console.log('this shoud return true:');
+console.log(arr1.join('') === [1, 0, 1].join(''));
+console.log(arr2.join('') === [0, 1, 0].join(''));
+
+
 //different data types:
 console.log(isAntiArray([undefined, NaN, undefined], [NaN, undefined, NaN]))// === true);
+console.log(isAntiArray([-0, null, -0], [null, -0, null]))// === true);
+console.log(isAntiArray([undefined, NaN, undefined], [NaN, undefined, undefined]))// === false);
+
+//case sensitive
+console.log(isAntiArray(['A', 'B', 'A'], ['a', 'b', 'a']) === false);
 
 // //more than two data types 
 console.log(isAntiArray([3.14, true, 3.14], [3.14, false, 3.14]) === false);
@@ -92,3 +106,14 @@ console.log(isAntiArray([1, 2, 1], [1, 1, 2]) === false);
 
 //other data types:
 console.log(isAntiArray({}, 1) === null);
+console.log(isAntiArray(null, null) === null);
+console.log(isAntiArray(undefined, NaN) === null);
+console.log(isAntiArray('hello', '1') === null);
+console.log(isAntiArray(' ', true) === null);
+console.log(isAntiArray(false, false) === null);
+console.log(isAntiArray('[]', false) === null);
+
+//just one data type :
+console.log(isAntiArray([1], [2]) === false);
+console.log(isAntiArray([1, 1], [1, 1]) === false);
+
