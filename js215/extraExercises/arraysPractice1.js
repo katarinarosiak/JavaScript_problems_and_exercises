@@ -2,7 +2,7 @@
 
 
 let arr = [[1, 2, 3, 4], ['a', 'b', 'c', 'd'], [undefined, NaN, null], [[], {}]];
-console.log(secondNested(arr))
+console.log(secondNested(arr));
 // => [2, 'b', NaN, {}]
 
 // i: nested arr [[], []]
