@@ -5,6 +5,11 @@
 
 // If any array contains fewer items than necessary, supplement the missing item with "*".
 
+// console.log(combineArrays([0, 1, 2], [0, 1, 2], [0, 1, 2])); // [[0, 0, 0], [1 ,1 ,1], [2, ,2 ,2]]  
+
+// console.log(combineArrays([1], [2], [3]) );// [[1, 2, 3], ['*', '*', '*'], ['*', '*', '*']];
+
+
 
 // i: three arrays
 // o: one array (all input array combined into nested array) 
@@ -16,10 +21,10 @@
 // - arrays can contain different data types 
 // - the arrays can be empty
 // - never more than 3
-  
+
 //   [[0, 1, 2], [0, 1, 2], [0, 1, 2]] 
-  
-      // 00, 11 22  00  11 22  00 11 22
+
+// 00, 11 22  00  11 22  00 11 22
 
 //  [[0, 0, 0], [1 ,1 ,1], [2, ,2 ,2]]
 // iy  iy  iy    iy iy iy    iy iy iy
@@ -42,29 +47,27 @@
 
 function combineArrays(...arrays) {
   let finalArr = [[], [], []];
-  if (arrays.every(arr => !arr.length)) return finalArr; 
-  let withStars =  arrays.map(innerArr => (innerArr.concat(['*', '*', '*']).slice(0,3)));
-  
-  withStars.forEach((innerArr, i) => innerArr.forEach((el, y) => {
-      finalArr[y].push(el)
+  if (arrays.every(arr => !arr.length)) return finalArr;
+  let withStars = arrays.map(innerArr => (innerArr.concat(['*', '*', '*']).slice(0, 3)));
 
+  withStars.forEach((innerArr, i) => innerArr.forEach((el, y) => {
+    finalArr[y].push(el)
   }))
   return finalArr;
-};  
-
+};
 
 
 //refactored:
 
 function combineArrays(...arrays) {
   let finalArr = [[], [], []];
-  if (arrays.every(arr => !arr.length)) return finalArr; 
-  
+  if (arrays.every(arr => !arr.length)) return finalArr;
+
   arrays.forEach((innerArr, i) => innerArr.forEach((el, y) => {
     finalArr[y].push(el === undefined ? '*' : el);
   }))
   return finalArr;
-};  
+};
 
 
 
@@ -73,7 +76,7 @@ function combineArrays(...arrays) {
 // console.log(combineArrays([1, 2, 3], [4, 5, 6], [7, 8, 9])); // [[1, 4, 7], [2, 5,  8], [3, 6, 9]]
 // console.log(combineArrays(["Jack", "Joe", "Jill"], ["Stuart", "Sammy", "Silvia"], ["Rick", "Raymond", "Riri"])); // [["Jack", "Stuart", "Rick"], ["Joe", "Sammy",  "Raymond"], ["Jill", "Silvia", "Riri"]]
 
-// // //differnet data types in arrats 
+// // //differnet data types in arrays 
 // console.log(combineArrays([false, "false", [[], []]], ["true", true, "bool"], ["null", "undefined", NaN])); // [[false, "true", "null"], ["false", true, "undefined"], [[[], []], "bool", NaN]]
 
 // console.log(combineArrays([false, {1:1}, undefined], ["true", true, [1,2,3]], ["null", "undefined", null])); // [[false, "true", "null"], [{1:1}, true, "undefined"], [undefined, [1,2,3], null]]
