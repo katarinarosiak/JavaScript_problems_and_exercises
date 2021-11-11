@@ -96,32 +96,32 @@ Write a function that counts the number of sections repeating the same word (cas
 
 // counter 1
 //          abcd abcd abcd dhc hcbhd abcd  
-         
+
 
 function countAdjacentPairs(str) {
   let arr = [];
-  
-  if (str.length === 0) return 0; 
-  
+
+  if (str.length === 0) return 0;
+
   let splittedArr = str.split(' ');
-  
+
   let startSlice = 0;
-  let endSlice = 2; 
+  let endSlice = 2;
   for (let i = 0; i < splittedArr.length; i++) {
     let sliceOfStr = splittedArr.slice(startSlice, endSlice);
-    if ( isTheSame(sliceOfStr)) {
-        endSlice += 1; 
+    if (isTheSame(sliceOfStr)) {
+      endSlice += 1;
     } else {
       startSlice += sliceOfStr.length;
-      endSlice += 2; 
+      endSlice += 2;
       arr.push(sliceOfStr);
     }
   }
-  return arr; 
+  return arr;
 }
 
 function isTheSame(slice) {
-  return slice[0].toLowerCase() === slice[slice.length-1].toLowerCase();
+  return slice[0].toLowerCase() === slice[slice.length - 1].toLowerCase();
 }
 
 
