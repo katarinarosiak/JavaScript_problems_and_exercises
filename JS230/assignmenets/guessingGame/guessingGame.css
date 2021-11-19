@@ -1,0 +1,39 @@
+body {
+  padding: 25px 0; 
+  margin: 0; 
+  background-color: rgb(26, 63, 51);
+  text-align: center;
+}
+
+h1 {
+  color: rgb(241, 189, 66);
+  font-size: xxx-large;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+p {
+  color: rgb(212, 248, 197);
+  font-size: x-large;
+}
+
+a {
+  color: rgb(255, 254, 190);
+  font-size: x-large;
+}
+
+button {
+  background-color: rgb(241, 189, 66);
+  margin: 10px;
+  width: 140px;
+  height: 60px;
+  font: bold 30px Helvetica, Arial, sans-serif;
+}
+
+input {
+  background-color: cornsilk;
+  height: 150px;
+  font: normal 25px Helvetica, Arial, sans-serif;
+  text-align: center;
+  padding: 5px;
+  border: 1px solid 'black';
+}

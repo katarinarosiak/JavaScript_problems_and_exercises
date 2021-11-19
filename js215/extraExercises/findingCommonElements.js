@@ -2,10 +2,7 @@
 // Create a function that takes two "sorted" arrays of elements and returns an array of elements which are common to both the input arrays.
 
 //Examples:
-commonElements([-1, 3, 4, 6, 7, 9], [1, 3]) ➞[[3]]
-
-
-
+commonElements([-1, 3, 4, 6, 7, 9], [1, 3]) //[3]
 
 //Test Cases:
 //invalid input: 
