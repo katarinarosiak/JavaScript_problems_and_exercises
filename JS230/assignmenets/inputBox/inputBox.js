@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   textField.addEventListener('click', event => {
     event.stopPropagation();
+    console.log(this);
     textField.classList.add('focused');
     intervalId = intervalId || setInterval(function () {
       textField.classList.toggle('cursor');
