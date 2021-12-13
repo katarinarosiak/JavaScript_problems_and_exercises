@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <button id="button">Get the text file</button>
+  <script>
+    //create event listener 
+    let button = document.getElementById('button');
+    button.addEventListener('click', doSomething);
+
+    //function called when the event is fired 
+    function doSomething() {
+
+      //create XMLHttpRequest Object
+      let xhr = new XMLHttpRequest();
+
+      //open the connection to given URL with GET method
+      xhr.open('GET', 'https://api.github.com/repos/rails/rails');
+
+      //log the response text if the status is 200
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          console.log(this.responseText);
+        }
+      }
+      //send request with optional data 
+      xhr.send();
+    }
+  </script>
+</body>
+
+</html>
