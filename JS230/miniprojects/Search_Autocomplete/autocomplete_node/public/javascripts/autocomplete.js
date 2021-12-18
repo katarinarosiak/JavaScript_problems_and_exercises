@@ -1,180 +1,209 @@
-// const Autocomplete = {
-//   wrapInput: function () {
-//     let wrapper = document.createElement('div');
-//     wrapper.classList.add('autocomplete-wrapper');
-//     this.input.parentNode.appendChild(wrapper);
-//     wrapper.appendChild(this.input);
-//   },
+import debounce from './debounce.js';
 
-//   createUI: function () {
-//     let listUI = document.createElement('ul');
-//     listUI.classList.add('autocomplete-ui');
-//     this.input.parentNode.appendChild(listUI);
-//     this.listUI = listUI;
+const Autocomplete = {
+  wrapInput: function () {
+    //this.input.classList.add('autocomplete-wrapper');
+    //why do we need to create a new div and not just
+    // wrap the input??
+    let wrapper = document.createElement('div');
+    wrapper.classList.add('autocomplete-wrapper');
+    this.input.parentNode.appendChild(wrapper);
+    wrapper.appendChild(this.input);
+  },
+  createUI: function () {
+    //create DOM elements: 
+    let listUI = document.createElement('ul');
+    listUI.classList.add('autocomplete-ui');
 
-//     let overlay = document.createElement('div');
-//     overlay.classList.add('autocomplete-overlay');
-//     overlay.style.width = `${this.input.clientWidth}px`;
+    let overlay = document.createElement('div');
+    overlay.classList.add('autocomplete-overlay');
+    //add the same width as input
+    overlay.style.width = `${this.input.clientWidth}px`;
 
-//     this.input.parentNode.appendChild(overlay);
-//     this.overlay = overlay;
-//   },
+    //add as syblings of text 
+    this.input.parentElement.appendChild(listUI);
+    this.input.parentElement.appendChild(overlay);
 
-//   bindEvents: function () {
-//     this.input.addEventListener('input', this.valueChanged.bind(this));
-//     this.input.addEventListener('keydown', this.handleKeydown.bind(this));
-//     this.input.addEventListener('mousedown', this.handleMousedown.bind(this));
-//   },
-//   //hide the list and ill the text input with the clicked-on country name
-//   handleKeydown: function (event) {
-//     let chosenName = event. //get value of div 
-//   },
-//   //user select a country by pressing up or down arrow
-//   handleKeydown: function (event) {
-//     switch (event.key) {
-//       case 'ArrowDown':
-//         event.preventDefault();
-//         if (this.selectedIndex === null || this.selectedIndex === this.matches.length - 1) {
-//           this.selectedIndex = 0;
-//         } else {
-//           this.selectedIndex += 1;
-//         }
-//         this.bestMatchIndex = null;
-//         this.draw();
-//         break;
-//       case 'ArrowUp':
-//         event.preventDefault();
-//         if (this.selectedIndex === null || this.selectedIndex === 0) {
-//           this.selectedIndex = this.matches.length - 1;
-//         } else {
-//           this.selectedIndex -= 1;
-//         }
-//         this.bestMatchIndex = null;
-//         this.draw();
-//         break;
-//       case 'Tab':
-//         if (this.bestMatchIndex !== null && this.matches.length !== 0) {
-//           this.input.value = this.matches[this.bestMatchIndex].name;
-//           event.preventDefault();
-//         }
-//         this.reset();
-//         break;
-//       case 'Enter':
-//         this.reset();
-//         break;
+    //add properties:
+    this.listUI = listUI;
+    this.overlay = overlay;
+  },
+  bindEvents: function () {
+    this.input.addEventListener('input', this.valueChanged.bind(this));
+    this.input.addEventListener('keydown', this.handleKeyDown.bind(this));
+    this.listUI.addEventListener('mousedown', this.handleMousedown.bind(this));
+  },
+  valueChanged: function () {
+    let value = this.input.value;
 
-//       case 'Escape':
-//         this.input.value = this.previousValue;
-//         this.reset();
-//         break;
+    if (value.length > 0) {
+      this.fetchMatches(value, matches => {
+        this.visible = true;
+        this.matches = matches;
+        //why bestMatchIndex is here? Not in the init?
+        // why we swich it between null and 0?
+        this.bestMatchIndex = 0;
+        this.selectedIndex = null;
+        this.draw();
+      });
+    } else {
+      this.reset();
+    }
+  },
+  handleKeyDown: function (event) {
+    const lastCountryIdx = this.matches.length - 1;
 
-//     }
-//   },
+    switch (event.key) {
+      case 'ArrowDown':
+        event.preventDefault();
+        if (this.selectedIndex === null || this.selectedIndex === lastCountryIdx) {
+          this.selectedIndex = 0;
+        } else {
+          this.selectedIndex++;
+        }
+        this.bestMatchIndex = null;
+        this.draw();
+        break;
+      case 'ArrowUp':
+        event.preventDefault();
+        if (this.selectedIndex === null || this.selectedIndex === 0) {
+          this.selectedIndex = lastCountryIdx;
+        } else {
+          this.selectedIndex--;
+        }
 
-//   valueChanged: function () {
-//     let value = this.input.value;
-//     this.previousValue = value;
+        this.bestMatchIndex = null;
+        this.draw();
+        break;
+      case 'Tab':
+        if (this.bestMatchIndex !== null && this.selectedIndex !== 0) {
+          this.input.value = this.matches[this.bestMatchIndex].name;
+        }
+        event.preventDefault();
+        this.reset();
+        break;
+      case 'Enter':
+        this.reset();
+        break;
+      case 'Escape':
+        this.input.value = this.previousValue;
+        this.reset();
+        break;
+    }
+    // this.inputVal = this.matches[this.bestMatchIndex].name;
+    // this.reset();
 
-//     if (value.length > 0) {
-//       //send AJAX request to the server with queries 
-//       this.fetchMatches(value, matches => {
-//         this.visible = true; //overlay has any text in it
-//         this.matches = matches; //list of countries 
-//         this.bestMatchIndex = 0; //index of a country that best matches 
-//         this.selectedIndex = null; //reset selected index to default
-//         this.draw();
-//       });
-//     } else {
-//       this.reset();
-//     }
-//   },
-//   fetchMatches: function (query, callback) {
-//     let request = new XMLHttpRequest();
+  },
 
-//     request.addEventListener('load', () => {
-//       callback(request.response);
-//     });
+  fetchMatches: function (value, callback) {
+    //create a url wit a right query 
+    let path = `${this.url}${encodeURIComponent(value)}`;
+    let request = new XMLHttpRequest();
 
-//     request.open('GET', `${this.url}${encodeURIComponent(query)}`);
-//     request.responseType = 'json';
-//     request.send();
-//   },
-//   draw: function () {
-//     //remove previous list items(country names) remndered earlier
-//     while (this.listUI.lastChild) {
-//       this.listUI.removeChild(this.listUI.lastChild);
-//     }
+    request.addEventListener('load', event => {
+      callback(request.response);
+    })
 
-//     //set overlay content to emty str if visible is false
-//     if (!this.visible) {
-//       this.overlay.textContent = '';
-//       return;
-//     }
+    request.open('GET', path);
+    request.responseType = 'json';
+    request.send();
 
-//     //render the appropriate country name 
-//     if (this.bestMatchIndex !== null && this.matches.length !== 0) {
-//       let selected = this.matches[this.bestMatchIndex];
-//       this.overlay.textContent = this.generateOvelayContent(this.input.value, selected);
-//     } else {
-//       this.overlay.textContent = '';
-//     }
+    //why in the LS solution we first add EL and call a callback and only then open a conetcion? 
+    // let request = new XMLHttpRequest();
+
+    // request.addEventListener('load', () => {
+    //   callback(request.response);
+    // });
+
+    // request.open('GET', `${this.url}${encodeURIComponent(query)}`);
+    // request.responseType = 'json';
+    // request.send();
+  },
+
+  draw: function () {
+    //    - remove all the previous list items rendered to the listUI
+    //    - set the overlay content to an empty string if visible is false
+    //    - repopulate listUI with the current set of macthed countries
+    //    - add the country names to the listUI element
+    //    - wrap each country in a `li` element with `autocomplete-ui-choice` class.
+
+    while (this.listUI.firstChild) {
+      this.listUI.removeChild(this.listUI.lastChild);
+    }
+
+    if (!this.visible) {
+      this.overlay.textContent = '';
+      return;
+    }
+
+    // - choose the first country from the matches
+    // - display a suggestion in the input window
+    if (this.bestMatchIndex !== null && this.matches.length !== 0) {
+      let match = this.matches[this.bestMatchIndex];
+      this.overlay.textContent = this.generateOverlay(this.input.value, match.name);
+    } else {
+      //is this needed?? Why? 
+      this.overlay.textContent = '';
+    }
 
 
-//     //repupulate listUI with current set of matched countries
-//     this.matches.forEach((match, index) => {
-//       let li = document.createElement('li');
-//       li.classList.add('autocomeplete-ui-choice');
+    //why we don't have tro serialize JSON here? 
+    //let countries = JSON.stringify(this.matches);
+    this.matches.forEach((country, index) => {
+      let li = document.createElement('li');
+      li.classList.add(`autocomplete-ui-choice`);
 
-//       //
-//       if (index === this.selectedIndex) {
-//         li.classList.add('selected');
-//         this.input.value = match.name;
-//       }
+      if (index === this.selectedIndex) {
+        li.classList.add('selected');
+        this.input.value = country.name;
+      }
+      li.textContent = country.name;
+      this.listUI.appendChild(li);
+    })
 
-//       //add country names to listUI
-//       li.textContent - match.name;
-//       this.listUI.appendChild(li);
+  },
 
-//     });
-//   },
+  generateOverlay: function (value, match) {
+    return value + match.slice(value.length)
+  },
 
-//   //sets values to initial vals
-//   reset: function () {
-//     this.visible = false;
-//     this.matches = [];
-//     this.bestMatchIndex = null;
-//     this.selectedIndex = null;
-//     this.previousValue = null;
+  handleMousedown: function (event) {
+    let element = event.target;
+    this.input.value = element.textContent;
+    this.reset();
+  },
 
-//     //clear the UI
-//     this.draw();
-//   },
+  reset: function () {
+    // call `reset()` when the user clears the input 
+    //   - set `visible` and `matches` to initial values
+    //   - cleat the UI (call `draw()`
+    this.visible = false;
+    this.matches = [];
+    this.bestMatchIndex = null;
+    this.selectIndex = null;
+    this.previousValue = null;
 
-//   //match the overlay if lowercase: take first letter of input and compelte the rest
-//   generateOvelayContent: function (value, match) {
-//     let end = match.name.substr(value.length);
-//     return value + end;
-//   },
+    this.draw();
+  },
 
-//   init: function () {
-//     this.input = document.querySelector('input');
-//     this.url = '/countries?matching=';
+  init: function () {
+    this.input = document.querySelector('input');
+    this.url = '/countries?matching=';
+    this.listUI = null;
+    this.overlay = null;
+    this.visible = false;
+    this.matches = [];
+    this.bestMatchIndex = null;
+    this.selectedIndex = null;
+    this.previousValue = null;
 
-//     this.listUI = null;
-//     this.overlay = null;
+    this.wrapInput();
+    this.createUI();
+    this.bindEvents();
 
-//     this.visible = false;
-//     this.matches = [];
+  }
+};
 
-//     this.wrapInput();
-//     this.createUI();
-//     this.bindEvents();
-
-//     this.reset();
-//   },
-
-// };
-
-// document.addEventListener('DOMContentLoaded', () => {
-//   Autocomplete.init();
-// });
+document.addEventListener('DOMContentLoaded', () => {
+  Autocomplete.init();
+});
