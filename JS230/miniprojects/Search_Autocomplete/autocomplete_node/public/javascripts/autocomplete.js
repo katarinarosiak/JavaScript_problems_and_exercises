@@ -1,7 +1,27 @@
 import debounce from './debounce.js';
 
-const Autocomplete = {
-  wrapInput: function () {
+class Autocomplete {
+  constructor(url, input) {
+    this.input = input;
+    this.url = url;
+    this.listUI = null;
+    this.overlay = null;
+    this.visible = false;
+    this.matches = [];
+    this.bestMatchIndex = null;
+    this.selectedIndex = null;
+    this.previousValue = null;
+
+    this.wrapInput();
+    this.createUI();
+
+    this.valueChanged = debounce(this.valueChanged.bind(this));
+
+    this.bindEvents();
+
+  }
+
+  wrapInput() {
     //this.input.classList.add('autocomplete-wrapper');
     //why do we need to create a new div and not just
     // wrap the input??
@@ -9,8 +29,8 @@ const Autocomplete = {
     wrapper.classList.add('autocomplete-wrapper');
     this.input.parentNode.appendChild(wrapper);
     wrapper.appendChild(this.input);
-  },
-  createUI: function () {
+  }
+  createUI() {
     //create DOM elements: 
     let listUI = document.createElement('ul');
     listUI.classList.add('autocomplete-ui');
@@ -27,13 +47,13 @@ const Autocomplete = {
     //add properties:
     this.listUI = listUI;
     this.overlay = overlay;
-  },
-  bindEvents: function () {
-    this.input.addEventListener('input', this.valueChanged.bind(this));
+  }
+  bindEvents() {
+    this.input.addEventListener('input', this.valueChanged);
     this.input.addEventListener('keydown', this.handleKeyDown.bind(this));
     this.listUI.addEventListener('mousedown', this.handleMousedown.bind(this));
-  },
-  valueChanged: function () {
+  }
+  valueChanged() {
     let value = this.input.value;
 
     if (value.length > 0) {
@@ -49,8 +69,8 @@ const Autocomplete = {
     } else {
       this.reset();
     }
-  },
-  handleKeyDown: function (event) {
+  }
+  handleKeyDown(event) {
     const lastCountryIdx = this.matches.length - 1;
 
     switch (event.key) {
@@ -93,9 +113,9 @@ const Autocomplete = {
     // this.inputVal = this.matches[this.bestMatchIndex].name;
     // this.reset();
 
-  },
+  }
 
-  fetchMatches: function (value, callback) {
+  fetchMatches(value, callback) {
     //create a url wit a right query 
     let path = `${this.url}${encodeURIComponent(value)}`;
     let request = new XMLHttpRequest();
@@ -118,9 +138,9 @@ const Autocomplete = {
     // request.open('GET', `${this.url}${encodeURIComponent(query)}`);
     // request.responseType = 'json';
     // request.send();
-  },
+  }
 
-  draw: function () {
+  draw() {
     //    - remove all the previous list items rendered to the listUI
     //    - set the overlay content to an empty string if visible is false
     //    - repopulate listUI with the current set of macthed countries
@@ -161,49 +181,35 @@ const Autocomplete = {
       this.listUI.appendChild(li);
     })
 
-  },
+  }
 
-  generateOverlay: function (value, match) {
+  generateOverlay(value, match) {
     return value + match.slice(value.length)
-  },
+  }
 
   handleMousedown: function (event) {
-    let element = event.target;
-    this.input.value = element.textContent;
-    this.reset();
-  },
+  let element = event.target;
+  this.input.value = element.textContent;
+  this.reset();
+}
 
-  reset: function () {
-    // call `reset()` when the user clears the input 
-    //   - set `visible` and `matches` to initial values
-    //   - cleat the UI (call `draw()`
-    this.visible = false;
-    this.matches = [];
-    this.bestMatchIndex = null;
-    this.selectIndex = null;
-    this.previousValue = null;
+reset() {
+  // call `reset()` when the user clears the input 
+  //   - set `visible` and `matches` to initial values
+  //   - cleat the UI (call `draw()`
+  this.visible = false;
+  this.matches = [];
+  this.bestMatchIndex = null;
+  this.selectIndex = null;
+  this.previousValue = null;
 
-    this.draw();
-  },
+  this.draw();
+}
 
-  init: function () {
-    this.input = document.querySelector('input');
-    this.url = '/countries?matching=';
-    this.listUI = null;
-    this.overlay = null;
-    this.visible = false;
-    this.matches = [];
-    this.bestMatchIndex = null;
-    this.selectedIndex = null;
-    this.previousValue = null;
 
-    this.wrapInput();
-    this.createUI();
-    this.bindEvents();
-
-  }
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-  Autocomplete.init();
+  let input = document.querySelector('input');
+  let autocomplete = new Autocomplete('/countries?matching=', 'input');
 });

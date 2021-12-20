@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    function retriveSchedules() {
+      let request = new XMLHttpRequest();
+      request.open('GET', 'http://localhost:3001/api/schedules');
+      request.timeout = 5000;
+      request.responseType = 'json';
+
+      request.addEventListener('load', () => {
+        alertUser(request.response);
+      })
+
+      request.ontimeout = function () {
+        alert('Your request took too long. Please try again.');
+      };
+
+      request.addEventListener('loadend', () => {
+        alert('The request has been completed');
+      })
+      request.send();
+
+
+    }
+
+    function alertUser(data) {
+
+      let schedules;
+
+      if (data.length > 0) {
+        schedules = data.reduce((obj, curr) => {
+          if (obj[curr.staff_id]) {
+            obj[curr.staff_id]++;
+          } else {
+            obj[curr.staff_id] = 1;
+          }
+          return obj;
+        }, {});
+
+        let schedule_info = [];
+
+        for (let key in schedules) {
+          schedule_info.push(`{staff ${key}: ${schedules[key]}}`);
+        }
+        alert(schedule_info.join(', '));
+      } else {
+        alert('There are currently no schedules availble for booking.');
+      }
+    };
+
+
+
+    retriveSchedules();
+  </script>
+  <title>Document</title>
+</head>
+
+<body>
+
+</body>
+
+</html>
