@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arithmetic Calculator</title>
+</head>
+<body>
+    <h1>Arithmetic Calculator</h1>  
+    <h2>0</h2>
+    <form>
+        <input type="number" value="0" id="first_num"></input>
+        <select id="operator" name="operator" id="operator">
+            <option value="+">+</option>
+            <option value="-">-</option>
+            <option value="*">*</option>
+            <option value="/">/</option>
+          </select>
+          <input type="number" value="0" id="second_num"></input>
+        <input type="submit" data-block="submit" value="=">
+    </form>   
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            let resultWindow = document.querySelector("h2");
+            let form = document.querySelector('form');
+
+            form.addEventListener("submit", (event) => {
+                event.preventDefault();
+
+                let firstNum = +document.getElementById("first_num").value;
+                let secondNum = +document.getElementById("second_num").value;
+                let operator = document.querySelector("select").value;
+
+                let result = 0;
+                switch(operator) {
+                    case '+':
+                        result = firstNum + secondNum;
+                        break;
+                    case "-":
+                        result = firstNum - secondNum;
+                        break;
+                    case "*":
+                        result = firstNum * secondNum;
+                        break;
+                    case "/":
+                        result = firstNum / secondNum;
+                        break;
+                }
+
+                resultWindow.textContent = result; 
+            });
+
+
+
+        });
+
+    </script>   
+</body>
+</html>
