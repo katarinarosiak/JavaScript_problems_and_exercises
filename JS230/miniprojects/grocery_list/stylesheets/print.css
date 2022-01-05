@@ -1,0 +1,5 @@
+@import url("stylesheets/groceries.css") print;
+
+@page {}
+
+@media print {}
