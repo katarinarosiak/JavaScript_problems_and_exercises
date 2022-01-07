@@ -10,7 +10,6 @@ Write a function that counts the number of sections repeating the same word (cas
 // countAdjacentPairs('orange Orange kiwi pineapple apple') //1, "Case should be ignored. 
 // countAdjacentPairs('orange Orange kiwi pineapple apple') //1")
 // countAdjacentPairs('banana banana banana') //1, "Once a word has been paired, it is ignored.
-// countAdjacentPairs('banana banana banana') //1
 // countAdjacentPairs('banana banana banana terracotta banana terracotta terracotta pie!') //, 2, "Once a word has been paired, it is ignored. Grab all pairs. countAdjacentPairs('banana banana banana terracotta banana terracotta terracotta pie!')")
 // countAdjacentPairs('pineapple apple') //, 0, "A pineapple is not an apple. countAdjacentPairs('pineapple apple')")
 
