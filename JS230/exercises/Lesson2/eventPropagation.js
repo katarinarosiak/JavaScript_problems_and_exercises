@@ -12,3 +12,5 @@ div3.addEventListener('click', (event) => {
 div4.addEventListener('click', (event) => {
   console.log(event.currentTarget.id);
 }, true);
+
+
