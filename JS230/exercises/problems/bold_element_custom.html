@@ -1,0 +1,46 @@
+<!-- 
+
+makeBold (sectionEl, callback)
+
+// grab the element
+// change style to bold 
+// call a callback and pass that element as arg  -->
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <title>Bold Element + Custom</title>
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+    function makeBold(element, callback) {
+
+        element.addEventListener("myEvent", event => {
+            event.target.fontWeight = "bold";
+            
+            if (event.detail.callback && typeof event.detail.callback === "function") {
+            event.detail.callback(element); 
+            }; 
+        })
+
+            let myEvent = new CustomEvent("myEvent", {
+            detail: {callback : callback},
+            bubbles: true,
+            cancelable: true,
+        }); 
+            element.dispatchEvent(myEvent); 
+    }
+
+        let sectionEl = document.querySelector('section'); 
+        makeBold(sectionEl, (el) => {
+        el.style.color = "red"; 
+        });
+
+})
+
+    </script>
+  </head>
+  <body>
+    <section>Hello World</section>
+    <p>Greetings!</p>
+  </body>
+</html>

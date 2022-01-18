@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        main, #sub {
+        padding: 15px;
+        }
+        main {
+        width: 100%;
+        height: 200px;
+        background: blue;
+        color: white;
+        }
+
+        #sub {
+        position: relative;
+        top: 100px;
+        left: 15px;
+        background: red;
+        height: 50px;
+        width: 50%;
+        } 
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let main = document.querySelector('main');
+            let sub = document.querySelector('#sub');
+            
+            main.addEventListener('click', event => {
+                alert(event.currentTarget.childNodes[0].nodeValue);
+            });
+
+            sub.addEventListener('click', event => {
+                event.stopPropagation();
+                alert(event.currentTarget.childNodes[0].nodeValue); 
+            }); 
+
+
+
+        });
+    </script>
+</head>
+<body>
+    <main>
+        Main Area
+        <section id="sub">
+          Sub Area
+        </section>
+      </main>
+</body>
+</html>

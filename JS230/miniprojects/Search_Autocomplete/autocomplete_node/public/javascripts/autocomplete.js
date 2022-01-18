@@ -15,7 +15,8 @@ class Autocomplete {
     this.wrapInput();
     this.createUI();
 
-    this.valueChanged = debounce(this.valueChanged.bind(this));
+
+    this.valueChanged = debounce(this.valueChanged.bind(this), 300);
 
     this.bindEvents();
 
@@ -187,7 +188,7 @@ class Autocomplete {
     return value + match.slice(value.length)
   }
 
-  handleMousedown: function (event) {
+  handleMousedown(event) {
   let element = event.target;
   this.input.value = element.textContent;
   this.reset();
