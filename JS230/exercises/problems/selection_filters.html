@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let animalCalssVals = {
+                Vertebrate: ['Bear', 'Turtle', 'Whale', 'Salmon', 'Ostrich'], 
+                'Warm-blooded': ['Bear', 'Whale', 'Ostrich'],
+                'Cold-blooded': ['Salmon', 'Turtle'],
+                Mammal: ['Bear', 'Whale'], 
+                Bird: ['Ostrich'],
+            }; 
+
+            let animalsVals = {
+                Bear: ['Vertebrate', 'Warm-blooded', 'Mammal'], 
+                Turtle: ['Vertebrate', 'Cold-blooded'], 
+                Whale: ['Vertebrate', 'Warm-blooded', 'Mammal'],
+                Salmon: ['Vertebrate', 'Cold-blooded'],
+                Ostrich: ['Vertebrate', 'Warm-blooded', 'Bird'],  
+            };
+
+            let classifications = document.querySelector('#animal-classifications');
+            let animals = document.querySelector("#animals"); 
+            let form = document.querySelector('form'); 
+            let clear = document.querySelector('button');
+
+            form.addEventListener('change', event => {
+                event.stopPropagation(); 
+                let target = event.target; 
+                let val; 
+                 
+                if (target.id === 'animal-classifications') {
+                    val = animalCalssVals[target.value];
+                    populateVas(animals, val);
+
+                } else {
+                    val = animalsVals[target.value]; 
+                    populateVas(classifications, val);
+                }
+            }); 
+
+            clear.addEventListener('click', event => {
+                event.preventDefault();
+                form.replaceChild(classifications, form.children[0]);
+                form.replaceChild(animals, form.children[1]);
+            }); 
+
+ 
+ 
+           function populateVas({node}, valsArr) {
+                let select = document.createElement('select');
+                select.setAttribute('id', node.id);
+
+                valsArr.forEach((option) => {
+                    let newOption = document.createElement('option');
+                    newOption.value = option; 
+                    newOption.textContent = option; 
+                    select.appendChild(newOption);  
+                })
+                let idx = node.id === 'animal-classifications' ? 0 : 1; 
+                form.replaceChild(select, form.children[idx]); 
+
+                node.children.length = 0; 
+                console.log(node); 
+                valsArr.forEach((option, idx) => {
+                    node.children[idx] = new Option(option.value);
+                    console.log(node.children[idx]);  
+                })
+
+            }
+        }); 
+
+    </script>
+</head>
+<body>
+    <form id="selection-filters" method="post" action="#">
+        <select id="animal-classifications">
+          <option value="Classifications" selected="selected">Classifications</option>
+          <option value="Vertebrate">Vertebrate</option>
+          <option value="Warm-blooded">Warm-blooded</option>
+          <option value="Cold-blooded">Cold-blooded</option>
+          <option value="Mammal">Mammal</option>
+          <option value="Bird">Bird</option>
+        </select>
+        <select id="animals">
+          <option value="Animals" selected="selected">Animals</option>
+          <option value="Bear">Bear</option>
+          <option value="Turtle">Turtle</option>
+          <option value="Whale">Whale</option>
+          <option value="Salmon">Salmon</option>
+          <option value="Ostrich">Ostrich</option>    
+        </select>
+        <button id="clear">Clear</button>  
+      </form>
+</body>
+</html>

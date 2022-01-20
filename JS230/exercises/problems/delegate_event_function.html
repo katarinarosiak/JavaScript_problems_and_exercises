@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <title>Event Delegation Function</title>
+    <script>
+        /*
+            delegateEvent()
+        - delegate events to the descendant el (inner) of a parent el that matches 
+        - given selector
+        
+        i: 
+        parentElement
+        selector
+        eventTyoe
+        callback
+
+        o: 
+        boolean (true if it can add event listenet ) or undefined else 
+
+        section 
+         selector => p    
+
+
+         - all event handlers listen on buubling
+
+        R: 
+        - if no element => undefined immidietely 
+        - delegate to descendant of parent, 
+        - descendant matches the selector 
+        */
+    </script>
+  </head>
+  <body>
+    <main>
+      <section>
+        <h1>Header</h1>
+        <p>Content</p>
+      </section>
+      <aside>
+        <h2>Sub Side Notes</h2>
+        <p>Note 1</p>
+        <p>Note 2</p>
+      </aside>
+    </main>
+    <nav>
+      <p>Side Note</p>
+    </nav>
+  </body>
+</html>
