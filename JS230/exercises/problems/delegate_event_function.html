@@ -29,6 +29,53 @@
         - delegate to descendant of parent, 
         - descendant matches the selector 
         */
+       document.addEventListener('DOMContentLoaded', () => {
+        // const element2 = document.querySelector('main h1');
+
+        // const callback = ({target, currentTarget}) => {
+        // alert(`Target: ${target.tagName}\nCurrent Target: ${currentTarget.tagName}`);
+        // };
+
+        // delegateEvent(element2, 'h1', 'click', callback); 
+
+
+
+        // function delegateEvent(parentElement, selector, eventType, callback) {
+        //     let tagName = parentElement.tagName.toLowerCase(); 
+        //     let el = document.querySelector(`${tagName} ${selector}`);  
+        //     console.log(`${tagName} ${selector}`); 
+        //     if (el || tagName === selector) {
+        //         parentElement.addEventListener(eventType, callback);
+        //         console.log(true);
+        //         return true; 
+        //     }
+        //     console.log(undefined);
+        // }
+        // Possible elements for use with the scenarios
+        const element1 = document.querySelector('table');
+        const element2 = document.querySelector('main h1');
+        const element3 = document.querySelector('main');
+
+        // Possible callback for use with the scenarios
+        const callback = ({target, currentTarget}) => {
+        alert(`Target: ${target.tagName}\nCurrent Target: ${currentTarget.tagName}`);
+        };
+
+        function delegateEvent(parentElement, selector, eventType, callback) {
+            console.log(Array.prototype.slice.call(parentElement.querySelectorAll(selector))); 
+            if (parentElement && parentElement instanceof Element) {
+            return !parentElement.addEventListener(eventType, event => {
+            const validTargets = Array.prototype.slice.call(parentElement.querySelectorAll(selector));
+            console.log(validTargets); 
+            if (validTargets.includes(event.target)) {
+                callback(event);
+            }
+            });
+        }
+
+        }
+        delegateEvent(element2, 'p', 'click', callback);
+       }); 
     </script>
   </head>
   <body>
