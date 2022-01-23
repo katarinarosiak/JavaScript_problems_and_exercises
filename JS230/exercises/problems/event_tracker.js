@@ -28,9 +28,10 @@ let tracker = {
 
 function track(callback) {
     return (event) => {
-        tracker.events.push(event); 
-        tracker.elementsList.push(event.currentTarget)
-
-        callback(event);  
+        if (!(tracker.events.includes(event))) {
+            tracker.events.push(event); 
+            tracker.elementsList.push(event.currentTarget)
+            callback(event);
+        }  
     };
 }

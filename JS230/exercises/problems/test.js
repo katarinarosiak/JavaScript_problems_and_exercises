@@ -39,35 +39,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-
-
-
-let request = new XMLHttpRequest();
-
-request.open('GET', 'https://some-random-page.com');
-
-request.addEventListener('load', () => {
-    console.log(request.body)
-    console.log(request.response.body);      
-})
-
-request.send(); 
-
-
-
-
-let request = new XMLHttpRequest();
-
-let queryPath = encodeURIComponent('title=Hello World')
-request.open('POST', `https://ls-230-book-catalog.herokuapp.com/books?${queryPath}`);
-
-request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded'); 
-
-
-
-request.addEventListener('load', () => {
-    console.log(request.body)
-    console.log(request.response.body);      
-})
-
-request.send();
