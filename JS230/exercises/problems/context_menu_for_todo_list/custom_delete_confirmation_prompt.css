@@ -1,0 +1,98 @@
+* {
+    margin: 0;
+    padding: 0;    
+}
+
+body {
+    background-color: rgb(113, 176, 179);
+    text-align: center;
+    color: rgb(6, 44, 41);   
+    display: flex;
+    justify-content: center; /* horizontal */
+    align-items: center; /* vertical */
+}
+
+h1 {
+    margin-top: 40px;
+}
+
+img {
+    width: 25px;
+}
+
+.list {
+    margin-top: 20px;
+    width: 70%;
+}
+
+.flex-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-content: stretch;
+    align-items: flex-start;
+    border: rgb(6, 44, 41) solid 1px;
+    background-color: rgb(225, 238, 234);
+    width: 500px;
+    }
+
+.flex-item1 {
+    font-style: oblique;
+    font-size: 20px;
+    order: 0;
+    flex: 1 1 auto;
+    align-self: strech;
+    background-color: rgb(225, 238, 234);
+    width: 100%;
+    }
+
+    .flex-item1:hover {
+        background-color: rgb(200, 207, 205);
+}
+
+.flex-item2 {
+    order: 0;
+    flex: 0 1 auto;
+    background-color: rgb(225, 238, 234);
+    align-self: stretch;
+}
+
+.contextmenu {
+    visibility: hidden;
+    height: 100px;
+    width: 150px;
+    position: absolute;
+    /*
+    transform: translate(-50%, -50%);
+    pointer-events: none; */
+}
+
+/* .move {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    pointer-events: none; 
+} */
+
+.code {
+    visibility: visible;
+}
+
+button {
+    height: 35px;
+    width: 100%;
+    background-color: rgb(255, 255, 255);
+    
+}
+
+.contextmenu button:hover {
+    background-color: gray;
+}
+
+.confirmationBox {
+    visibility: hidden; 
+}  
+
+.visible {
+    visibility: visible; 
+}

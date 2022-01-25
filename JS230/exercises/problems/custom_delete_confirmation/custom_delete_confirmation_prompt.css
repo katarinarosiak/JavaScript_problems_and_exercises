@@ -1,0 +1,87 @@
+* {
+    margin: 0;
+    padding: 0;    
+}
+
+body {
+    background-color: rgb(113, 176, 179);
+    text-align: center;
+    color: rgb(6, 44, 41);   
+    display: flex;
+    justify-content: center; /* horizontal */
+    align-items: center; /* vertical */
+}
+
+h1 {
+    margin-top: 40px;
+}
+
+img {
+    width: 25px;
+}
+
+.list {
+    margin-top: 20px;
+    width: 70%;
+}
+
+.flex-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-content: stretch;
+    align-items: flex-start;
+    margin: 5px;
+    border: rgb(6, 44, 41) solid 4px;
+    border-radius: 8px;
+    background-color: rgb(225, 238, 234);
+    width: 500px;
+    }
+
+.flex-item1 {
+    font-style: oblique;
+    font-size: 20px;
+    order: 0;
+    flex: 1 1 auto;
+    align-self: strech;
+    background-color: rgb(225, 238, 234);
+    }
+
+.flex-item2 {
+    order: 0;
+    flex: 0 1 auto;
+    background-color: rgb(225, 238, 234);
+    align-self: stretch;
+}
+
+.confirmationBox {
+    visibility: hidden;
+    background-color: rgb(255, 255, 255);
+    border-radius: 8px;
+    height: 100px;
+    padding: 25px;
+    margin-top: 50px;
+}
+
+.visible {
+    visibility: visible;
+}
+
+button {
+    margin-top: 35px;
+    margin-left: 5px;
+    margin-right: 5px;
+    height: 35px;
+    width: 40px;
+}
+
+.yes {
+    color: floralwhite;
+    background-color: darkred;
+}
+
+.no {
+    color: floralwhite;
+    background-color: darkslategrey;
+}
