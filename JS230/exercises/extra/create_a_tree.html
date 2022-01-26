@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let data = {
+                "Fish": {
+                    "trout": {},
+                    "salmon": {}
+                },
+
+                "Tree": {
+                    "Huge": {
+                    "sequoia": {},
+                    "oak": {}
+                    },
+                    "Flowering": {
+                    "apple tree": {},
+                    "magnolia": {}
+                    }
+                }
+            };  
+
+            let container = document.getElementById('container');
+            createTree(container, data); // creates the tree in the container
+
+            function createTree(el, data) {
+                let children = Object.entries(data);
+                console.log(el); 
+
+                children.forEach(childArr => {
+                    let li = document.createElement('li');
+                    li.textContent = childArr[0];
+  
+                    if (Object.keys(childArr[1]).length > 0) {
+                        createTree(li, childArr[1]);
+                        el.appendChild(li); 
+                    } else {
+                        el.appendChild(li); 
+                    }
+                })
+
+
+
+                /*
+                - take obj 
+                - get entries 
+                - iterate through el 
+                - take first el and create a li from it 
+                 - if val not empty:
+                 - on call func recursively createTree(liEl, value) 
+                   - else : append li to el and return 
+                   
+                [[key, {}], [key, {}]]
+                */
+            }
+
+
+
+        }); 
+    </script>
+</head>
+<body>
+    <container id="container">
+
+    </container>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add a new member form</title>
+  <style>
+    h1 {
+      text-align: center;
+      font-size: 35px;
+    }
+
+    body {
+      color: rgb(44, 44, 44);
+    }
+
+    div {
+      text-align: center;
+    }
+
+    .input {
+      margin: 5px;
+      width: 150px;
+      height: 30px;
+      border: 3px solid lightgrey
+    }
+
+    label {
+      font-size: 20px;
+    }
+
+    #submit {
+      background-color: rgb(50, 177, 78);
+      border: none;
+      height: 35px;
+      width: 210px;
+      margin-top: 15px;
+      font-size: 18px;
+    }
+  </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        //getting schedules: 
+        /*
+        retrive all available schedules 
+        if one or more schedules are available count how many schedules 
+        for each staff and alter th euser format: 
+        {'staff {id}'; e.g, 'staff 1' : 4}
+        if no schedules alert the user that there ar eno schedules 
+
+        - the server sometimes slow down when there are more than 7 schdeules
+        - handle it: (???) 
+            -  when the request is send but there is no answer after 5 sec, cancell
+            - alert try again: 
+
+        - inform the user about the completion of the request regardless of success or failure (timeout) 
+
+
+        UI: staff Id
+        button get schedules count  
+
+        */
+
+    let formDiv = document.querySelector('.scheduleForm');
+    let button = document.createElement('button');
+    button.textContent = 'Get schedules';
+    button.setAttribute('id', 'submit'); 
+
+    formDiv.appendChild(button); 
+
+    button.addEventListener('click', event => { 
+
+        let request = new XMLHttpRequest();
+
+        request.open('GET', `http://localhost:3001/api/schedules`);
+        request.responseType = 'json'; 
+
+        request.addEventListener('load', () => {
+            let data = request.response; 
+            countAvailableSchedules(data);
+
+            //[{staff_id:1}, {staff_id:1}, {staff_id:2}] => [{staff_id:1, count: 2}, {staff_id:2, count:1}]
+            
+
+            function countAvailableSchedules(schedules) {
+                schedules.reduce((arr, schedule) => {
+                    // iterate through arr
+                    // find the arr element that contains the staff_id
+                    // if found:
+                    // access count and ++
+                    // 
+                    // if not found (undefined) 
+                    // create an obejct and push to array 
+
+                    if (idExist()) {
+                        
+                    } else {
+                        arr.push({[staff_id]:1}); 
+                    }
+
+                    return arr;
+                }, [])
+                /*
+                {staff_id: 1, count:1}
+                */
+            }
+        });
+        request.send();
+      })
+    });
+  </script>
+</head>
+
+<body>
+  <h1>Get Schedules:</h1>
+  <div class='scheduleForm'>
+  </div>
+</body>
+
+</html>

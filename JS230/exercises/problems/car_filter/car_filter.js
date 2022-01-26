@@ -3,15 +3,16 @@ class CarPage {
     constructor(cars) {
         this.cars = cars;
         this.filters = {
-            make:[],
-            model:[],
-            price:[], 
-            year:[]
+            make:['All'],
+            model:['All'],
+            price:['Any'], 
+            year:['Any']
         }; 
     }
 
     createFilterData() {
-        for (let key in this.filters) {
+        for (let key in this.filters) { 
+
             cars.forEach(car => {
                 if (!this.filters[key].includes(car[key])) {
                     this.filters[key].push(car[key])
@@ -23,7 +24,6 @@ class CarPage {
     createFilter() {
        
         let filterSection = document.querySelector('#filter'); 
-        // let labels = Object.keys(this.filters).map(word => word[0].toUpperCase() + word.slice(1));
 
         Object.keys(this.filters).forEach(label => {
             let filterDiv = document.createElement('div');
@@ -49,7 +49,6 @@ class CarPage {
         search.setAttribute('class', 'filter');
 
         search.addEventListener('click', this.renderDisplay.bind(this)); 
-
         filterSection.appendChild(search); 
 
     }
@@ -74,7 +73,7 @@ class CarPage {
         [img, heading, year, price, buyButton].forEach(el => carDiv.appendChild(el));
         div.appendChild(carDiv);  
     })
-        console.log('display created'); 
+
         return div; 
     }
 
@@ -98,7 +97,7 @@ class CarPage {
                 return (car[key].toString() === value) ||  value === 'Any' || value === 'All';
             })
         })
-        console.log('data rendered'); 
+
         let div = document.querySelector(".display");
         let parent = div.parentNode; 
         let newDiv = this.createCarDisplay(cars);
@@ -130,7 +129,6 @@ const cars = [
 document.addEventListener('DOMContentLoaded', () => {
     let carPage = new CarPage(cars); 
     carPage.initiPage();
-
 
 });
 

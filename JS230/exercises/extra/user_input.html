@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let ul = document.createElement('ul');
+            
+            for (let i = 0; i < 3; i++) {
+                let answer = prompt('What should we add now?');
+                let li = document.createElement('li');
+                li.textContent = answer; 
+                ul.appendChild(li);   
+            }
+
+            let list = document.querySelector('#list'); 
+            list.appendChild(ul); 
+        }); 
+    </script>
+</head>
+<body>
+    <div id='list'></div>
+</body>
+</html>
