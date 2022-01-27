@@ -40,7 +40,26 @@
   </ul>
 
   <script>
-    // ... your code ...
+
+    function walk(node, callback) {
+        callback(node);
+
+        for (let index = 0; index < node.childNodes.length; index += 1) {
+            walk(node.childNodes[index], callback);
+        }
+    }
+
+    let ul = document.querySelector('ul');
+    
+    walk(ul, (node) => {
+        if (node.tagName === 'LI') {
+            let descendants = node.getElementsByTagName('li');
+
+            if (descendants.length > 0) {
+                node.firstChild.data += ` [${descendants.length}]`;
+            }
+        }
+    })
   </script>
 
 </body>

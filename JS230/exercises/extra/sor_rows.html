@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            /*
+            get t body el
+            get all tr
+            sort arr by accessing the name {FirstChild.nodeValue}
+            insert lements to tbdy 
+            */
+            let tbody = document.querySelector('tbody');
+            let allTr = [...tbody.querySelectorAll('tr')];
+            let a = allTr.sort(compare);
+            tbody.remove();
+            let newTbody = document.createElement('tbody'); 
+            allTr.forEach(el => {
+                newTbody.appendChild(el); 
+            });
+
+            let table = document.querySelector('table');
+            table.appendChild(newTbody)
+
+
+
+            function compare(a, b) {
+                if (a.textContent.trim() < b.textContent.trim()) {
+                    return -1;
+                }
+                if (a.textContent.trim() > b.textContent.trim()) {
+                    return 1;
+                }
+                // a must be equal to b
+                return 0;
+            }
+
+        }); 
+    </script>
+</head>
+<body>
+    <table>
+        <thead>
+          <tr>
+            <th>Name</th><th>Surname</th><th>Age</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>John</td><td>Smith</td><td>10</td>
+          </tr>
+          <tr>
+            <td>Pete</td><td>Brown</td><td>15</td>
+          </tr>
+          <tr>
+            <td>Ann</td><td>Lee</td><td>5</td>
+          </tr>
+          <tr>
+            <td>...</td><td>...</td><td>...</td>
+          </tr>
+        </tbody>
+        </table>
+</body>
+</html>
