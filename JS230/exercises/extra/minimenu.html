@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        /*
+        unordered list where each text is a link to google.com
+        on clikc on the link request should be sent to google (GET)
+        */
+        document.addEventListener('DOMContentLoaded', () => {
+            let button = document.querySelector('button');
+            let menu = document.createElement('ul');
+            let menuTextItems = ['firstItem', 'secondItem', 'thirdItem'];
+
+            menuTextItems.forEach(item => {
+                let li = document.createElement('li'); 
+                let a  = document.createElement('a');
+                a.setAttribute('href', 'www.google.com');
+                a.textContent = item;
+                li.appendChild(a);
+                a.addEventListener('click', (event) => {
+                    event.preventDefault(); 
+
+                    let request = new XMLHttpRequest(); 
+                    request.open('GET', 'www.google.com');
+                    
+                    request.addEventListener('load', (event) => {
+                        console.log('go to another page'); 
+                    }); 
+
+                    request.send(); 
+                });
+                
+                menu.appendChild(li);
+            }); 
+
+
+            button.addEventListener('click', (event) => {
+                let div = document.querySelector('#menu');
+                div.appendChild(menu);
+                
+                if (menu.style.visibility === 'visible') {
+                    menu.style.visibility = 'hidden';
+                } else {
+                    menu.style.visibility = 'visible';
+                }
+            }); 
+        }); 
+    </script>
+</head>
+<body>
+    <button> |> </button> Click me! 
+    <div id="menu"></div>
+</body>
+</html>
