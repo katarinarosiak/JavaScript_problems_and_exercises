@@ -5,6 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        .visible {
+            display:none;
+        }
+    </style>
     <script>
         /*
         get a nested array that represents a tree 
@@ -38,8 +43,7 @@
 
         */
         document.addEventListener('DOMContentLoaded', () => {
-            const listArr = [
-                {
+            const listArr = {
                     Animals: {
                         Mammals: {
                             Cow: {},
@@ -62,26 +66,37 @@
                             'Sea trout': {}
                         }
                     }
-                }
-            ];
-            let div = document.querySelector('div'); 
-            let ul = document.createElement('ul'); 
+            };
+            let div = document.querySelector('div');
+            let ul = document.createElement('ul');  
             
             createUl(listArr, ul);
             div.appendChild(ul); 
 
+            div.addEventListener('click', event => {
+
+                toggleDisplayOfChildren(event.target);
+            });
+
 
             function createUl(arr, parent) {
-                if (!Array.isArray(arr)) {
-                    arr = Object.entries(arr); 
-                }
-
+    
+                arr = Object.entries(arr); 
                 arr.forEach(el => {
-                    let li = document.createElement(li); 
+                    let ul = document.createElement('ul');
+                    let li = document.createElement('li'); 
                     li.textContent = el[0];
+                    li.appendChild(ul); 
                     parent.appendChild(li);
-                    createUl(el[1], li); 
+                    createUl(el[1], ul); 
                 })
+            }
+
+            function toggleDisplayOfChildren(parent) {
+                let children = [...parent.children[0].children];
+                children.forEach(child => {
+                    child.classList.toggle('visible'); 
+                });
             }
 
         }); 
