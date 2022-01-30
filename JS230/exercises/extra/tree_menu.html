@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        /*
+        get a nested array that represents a tree 
+        create a unordered list of it 
+        clicking on each element should hide/ show all the children 
+        use only one event handler (delegation) 
+
+
+        - [{Animals: {Mammals: {Cow: {}, Donkey: {}, Dogs:{}, Tigers:{}}, Other: {Snakers:{}}, {Birds:{}}, {Lizards:{}}}}, {Fishes:{Aquarium:{Guppy: {}, Angelfish:{}}, Sea:{Sea trout: {}}}}]
+        - create a ul element
+        - take the nested structutre and recursively create a list
+        - create list(arr, parent):
+            - iterate through the array (if not array change it to array )
+            - {Animals: {Mammals: {Cow: {}, Donkey: {}, Dogs:{}, Tigers:{}} =>
+            [[Animals, [{Mammals: {Cow: {}, Donkey: {}, Dogs:{}, Tigers:{}}]], []]
+            {a:{}, b{}} => [[a, {}], [b, [{}]]]
+            - iterate through the array: 
+            - on each element:
+            - take the first idx 0 and create a li element from it 
+              with text content of the key 
+            - attach it to the parent and call teh func (value, li)
+
+        - attach event handler to ul:
+        - on clikc of event.target 
+        - toggle display of alll its children 
+         - toggleDisplayOfChildren (parent)
+         - get all children 
+         - ietrate throgh each of them 
+         - toggle display
+
+
+        */
+        document.addEventListener('DOMContentLoaded', () => {
+            const listArr = [
+                {
+                    Animals: {
+                        Mammals: {
+                            Cow: {},
+                            Donkey: {},
+                            Dogs:{},
+                            Tigers:{}
+                        },
+                        Other: {
+                            Snakers:{},
+                            Birds:{},
+                            Lizards:{}
+                        }
+                    },
+                    Fishes:{
+                        Aquarium:{
+                            Guppy: {},
+                            Angelfish:{}
+                        },
+                        Sea:{
+                            'Sea trout': {}
+                        }
+                    }
+                }
+            ];
+            let div = document.querySelector('div'); 
+            let ul = document.createElement('ul'); 
+            
+            createUl(listArr, ul);
+            div.appendChild(ul); 
+
+
+            function createUl(arr, parent) {
+                if (!Array.isArray(arr)) {
+                    arr = Object.entries(arr); 
+                }
+
+                arr.forEach(el => {
+                    let li = document.createElement(li); 
+                    li.textContent = el[0];
+                    parent.appendChild(li);
+                    createUl(el[1], li); 
+                })
+            }
+
+        }); 
+    </script>
+</head>
+<body>
+    <div></div>
+</body>
+</html>
