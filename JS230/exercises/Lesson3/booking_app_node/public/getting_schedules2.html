@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+
+        /*
+        send a request to: /api/schedules
+        handle JSON => responseType
+        check how many schedules 
+        if more than 1: (length)
+        count how many schedules have each staff => {staff (staff_d): count } 
+            [{}, {}]
+                 {"id":1,"staff_id":1,"student_email":null,"date":"07-01-18","time":"06:10"}
+            iterate through the array of schedules
+            create an object 
+            take the staff id 
+            if dones exist in the object yet add and set counter to 1
+            else  
+            increment counter for that staff 
+        handle server slow down
+            set timeout 
+            add event listener on timeout alert
+
+        check for cempletion and infor the user
+            on load alert the user 
+        */
+        getAvailableSchedules();
+
+        function getAvailableSchedules() {
+            let request = new XMLHttpRequest(); 
+            request.open('GET', 'http://localhost:3001/api/schedules'); 
+
+            request.responseType = 'json';
+
+            request.timeout = 5000; 
+
+            request.addEventListener('timeout', event => {
+                alert('The time for the request has expired. Please try again.'); 
+            }); 
+
+            request.addEventListener('load', event => {
+                if (request.response.length === 0) {
+                    alert('There are no available schedules');
+                    return;  
+                }
+
+                let scheduleCounter = request.response.reduce((obj, currObj) => {
+                    if (obj[`staff ${currObj.staff_id}`]) {
+                        obj[`staff ${currObj.staff_id}`]++;
+                    } else {
+                        obj[`staff ${currObj.staff_id}`] = 1;
+                    }  
+                    return obj;
+                }, {});   
+
+                alert(scheduleCounter);
+
+            }); 
+
+            request.addEventListener('loadend', event => {
+                alert('The request has completed'); 
+            });
+            request.send(); 
+        }
+
+
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

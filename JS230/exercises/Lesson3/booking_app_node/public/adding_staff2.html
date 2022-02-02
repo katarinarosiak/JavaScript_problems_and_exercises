@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        /*
+        form afor adding new staff 
+        use the APU to add the syaff to database 
+
+        handle possible responses from the server and inform the user of the outcome
+        
+        
+        - if there is missing filed alter => 
+            - staff cannot be created check your inputes 
+
+        - if success altery => succesffuly created staff ith id: ... 
+        
+        A: 
+        send the request to /api/staff_members
+
+        - get the form 
+        - on submit 
+        prevent default 
+        get values from the user
+        send as query parameters
+
+
+        handle errors: 
+        if not 201
+        alert(request.response)
+
+        http://localhost:3001/api/staff_members?name=Red%20Pen&emailkatarinarosiak%40gmail.com
+        */
+        
+
+        document.addEventListener('DOMContentLoaded', () => {
+            let form = document.querySelector('form');
+            
+            form.addEventListener('submit', event => {
+                event.preventDefault(); 
+                let data = new FormData(form); 
+ 
+                let request = new XMLHttpRequest(); 
+                request.open('POST', `http://localhost:3001/api/staff_members`); 
+                
+                request.addEventListener('load', event => {
+                    if (request.status === 201) {
+                        alert('The staff was added succefully'); 
+                    } else {
+                        alert(request.response); 
+                    }
+                })
+
+                request.send(data); 
+            }); 
+
+
+
+
+
+        }); 
+    </script>
+</head>
+<body>
+    <form action="" method="post">
+        <label for="email">Email:</label>
+        <input type="text" name="email" id="email"/>
+        <label for="name">Name:</label>
+        <input type="text" name="name" id="name"/>
+        <input type="submit" value="Submit"/>
+      </form>
+</body>
+</html>

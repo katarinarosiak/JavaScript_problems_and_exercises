@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        /*
+
+        adding shcedules  
+        add one or more schedules 
+        - handle different responses from the server
+        - inform the user about them
+
+
+        dd more schedules button:
+        - when clicked uplicate form filds
+        form: 
+        - staff Name 
+        Date: 
+        Time: 
+        submit
+
+        API: 
+        staff_id (number)
+        date (str)
+        time (str)
+
+        request - JSON 
+
+        on submit:
+        - of any of the inputs missing ? re 
+        (all info rrquired therwise 4XX error Invalid input )
+        alert the user about the error
+
+        if succesful alert the user about the success
+        POST request to /api/schedules 
+
+
+        ALGO: 
+
+        retrive all staff members 
+        get the value of first input 
+        iterate throgh the arr 
+         - check if current obj has name ==== input 
+         if yes get the id 
+
+
+        create a form: 
+            - inside the form we need a div to duplicate (helper function) 
+        on submit the event send a request as a JSON 
+        to POST request to /api/schedules 
+
+        create JSON: formData => JSON 
+        change request header to json 
+
+        if not 201 alert request.response
+        else 
+        alert
+        the request was successful 
+        */
+
+        document.addEventListener('DOMContentLoaded', () => {
+            let form = document.createElement('form');
+            let addMoreSchedulesBtn = document.createElement('button');
+            addMoreSchedulesBtn.textContent = 'Add more schedules';
+            form.appendChild(addMoreSchedulesBtn);
+            let submit = document.createElement('button');
+            submit.textContent = 'Submit';
+            submit.setAttribute('type', 'submit'); 
+            form.appendChild(submit);   
+            document.body.appendChild(form);
+
+
+
+            let all_availableStaff;
+            getAllStaff(() => {
+                submit.insertAdjacentElement('beforebegin', createFormEl());
+
+                addMoreSchedulesBtn.addEventListener('click', event => {
+                    event.preventDefault(); 
+                    submit.insertAdjacentElement('beforebegin', createFormEl());
+                }); 
+            }); 
+        
+
+
+            form.addEventListener('submit', event => {
+                event.preventDefault(); 
+                let request = new XMLHttpRequest(); 
+                request.open('POST', 'http://localhost:3001/api/schedules');
+                let data = formDataToJson(form);
+
+                request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+                request.addEventListener('load', event => {
+                    if (request.status !== 201) {
+                       alert(request.response); 
+                    } else {
+                        alert('the request was succesful'); 
+                    }
+                });
+                console.log(data); 
+                request.send(data); 
+
+            }); 
+
+            function formDataToJson(form) {
+     
+                let inputs = [...form.children]; 
+               let scheduleData = {schedules: []}
+               inputs.forEach(el => {
+                   let data = {}; 
+                   if (el.tagName === 'DIV') {
+                    let fields = [...el.children]
+       
+                    fields.forEach(field => {
+                        if (field.tagName === 'INPUT') {
+                            if (field.id === 'staff_name') {
+                                data.staff_id = getStaffId(field.value); 
+                            } else {
+                                data[field.id] = field.value; 
+                            }
+                        }
+                    })
+                    scheduleData["schedules"].push(data); 
+                   }
+               }); 
+               return JSON.stringify(scheduleData); 
+
+            }
+
+            function getAllStaff(callback) {
+                let request = new XMLHttpRequest(); 
+
+                request.open('GET', 'http://localhost:3001/api/staff_members'); 
+
+                request.responseType = 'json';
+                request.addEventListener('load', event => {
+                    all_availableStaff = request.response;
+                    callback();   
+                }); 
+                request.send(); 
+            }
+
+            function getStaffId(name) {
+                let foundStaff = all_availableStaff.find(obj => {
+                    return obj[name];
+                }); 
+                
+                if (foundStaff) {
+                    return foundStaff.id
+                } else {
+                    return null; 
+                }
+            }
+
+            function createFormEl() {
+                let container = document.createElement('div');
+                let data = [['Staff_Name', 'anonymous', 'text'], ['Date', 'mm-dd-yy', 'date'], ['Time', 'hh:mm', 'time']];
+
+                data.forEach(option => {
+                    let label = document.createElement('label');
+                    label.setAttribute('id', option[0]);
+                    label.textContent = `${option[0]} :`;   
+                    let field = document.createElement('input');
+                    field.setAttribute('name', option[0]);
+                    field.setAttribute('type', option[2]); 
+                    field.setAttribute('id', option[0].toLowerCase()); 
+
+                    container.appendChild(label);
+                    container.appendChild(field);  
+
+                })
+                return container; 
+            }
+
+        }); 
+    </script>
+</head>
+<body>
+
+</body>
+</html>
+
+
+{
+   "schedules": [
+       {
+           "staff_name":"Marie Lo",
+           "date":"2022-02-09",
+           "time":"16:51"},
+ {"staff_name":"Vanessa V","date":"2022-02-10","time":"14:53"}
+ ]
+}
+
+{
+    "schedules": [
+        {
+            "staff_id": 1,
+            "date": "10-10-10",
+            "time": "12:12"
+        }
+    ]
+}
