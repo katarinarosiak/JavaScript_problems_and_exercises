@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .hidden {
+            visibility : hidden;
+        }
+    </style>
+    <script>
+        /*
+        booking schedules
+        - check requirements for booking 
+
+        if the student isn't in the database provide a way to create
+        the student  and then automatically proceed with thebooking 
+        when the student is created 
+ 
+        - one schedule at the time can be booked 
+        - if the student doesn't exist :
+            alert Student doesn not exist; booking_sequence 61523  <= booking sequence        
+        - make visible elements: add new student 
+        : 
+        form: 
+        hq Please provide new student details 
+        label: Email
+        email
+        Name
+        Booking Sequence ...
+        Submit button 
+        
+
+        - when student is added succesfully alert (succesfully added student 
+        to the datavse) 
+        )
+        - when booked:
+        alert ('Booked')
+
+        - when students doesnt exist = booking sequence in response
+
+        
+        Markup: 
+        H1 Schedules 
+
+        Form: 
+        label please select one schedule 
+            select
+                options   <= available schedules 
+        label: email 
+        input (email)
+        submit button 
+        
+        
+       a:
+       - init UI:
+        form1 
+        form2 (hidden)
+
+        class ScheduleBooking
+
+            this.createSchedulePath  = /api/bookings
+            this.createStudentPath = /api/students
+            this.currentStudenData = {
+                booking_sequence: 0
+                email: '';
+            }
+            this.formBooking
+            this.formNewSchedule
+
+        create schedule form
+
+        create newStudentForm 
+
+        create schedule() 
+
+        postData(data, path, callback) 
+            create new XHRHttpRequest
+            open (method, path)
+
+            onload callback
+
+            send(data); 
+        
+        bookSchedule()
+           data = newFormData(formBooking)
+
+            postData(data, this.createSchedulePath, )
+             callback () = >
+                - if not 204
+                alert the request response 
+                get the sequence from response 
+                add it to currenttudentData 
+                take the value of the email from formBooking value
+                add it to teh object currrent student 
+
+                make another form visible 
+                fill up values with what is in the student object 
+
+                else: 
+                    alert 'Success'    
+
+
+        createStudnet() 
+            data = newFormData(newStudentForm)
+            postData(data, createStudentPath) 
+                callback () =>   
+                    if not 201
+                        alert response  
+                    else: 
+                        alert response 
+
+        init UI
+            - send request to server to get all availabe schedules
+            - on the loead: 
+                - create schedule form: 
+                - create select el and set availabe schedules as options
+                - e mail field + label 
+                - submit button 
+                  - on submit + event handler 
+                   bookSchedule 
+            - create new stdent form (hidden)
+                'h1 please provide new student detail '
+                e mail 
+                name 
+                Booking Sequence
+                subbmit button 
+                    on submit callback ()  
+        
+        */
+
+       
+            class ScheduleBooking {
+                constructor(availableSchedulesPath, createSchedulePath, createStudentPath, getAllMembersPath) {
+                    this.availableSchedulesPath = availableSchedulesPath;
+                    this.getAllMembersPath = getAllMembersPath;
+                    this.createSchedulePath  = createSchedulePath;
+                    this.createStudentPath = createStudentPath;
+                }
+
+                init() {
+                    this.currentStudenData = {
+                        booking_sequence: 0,
+                        email: ''
+                    };
+                    this.formNewStudent = null;
+                    this.formNewSchedule = null; 
+                    this.contentDiv = null; 
+                    this.initUI()
+                }
+
+                initUI () {
+            //         - send request to server to get all availabe schedules
+            // - on the loead: 
+            //     - create schedule form: 
+
+            // - create new stdent form (hidden)
+
+                    this.contentDiv = document.querySelector('#content');
+
+                    let request = new XMLHttpRequest();
+                    request.open('GET', `http://localhost:3001${this.availableSchedulesPath}`);
+                    request.responseType = 'json';
+
+                    request.addEventListener('load', () => {
+                        this.createScheduleForm(request.response);
+                        this.createNewStudentForm();  
+
+                    }); 
+                    request.send(); 
+                }
+
+                fetchData(path, callback) {
+                    let request = new XMLHttpRequest();
+
+                    request.open('GET', `http://localhost:3001${path}`);
+                    request.responseType = 'json';
+
+                    request.addEventListener('load', callback);
+                    
+                    request.send(); 
+                }
+
+                createScheduleForm(data) {
+
+                    this.fetchData(this.getAllMembersPath, (response) => {
+                        let heading = document.createElement('H1');
+                        heading.textContent = 'Schedules';
+                        let labelSchedule = document.createElement('label');
+                        labelSchedule.textContent = ' Please select one schedule:'
+                        //createSelect need to take the response and use it to select 
+                        let select = this.createSelectEl(data);
+                        let emailLabel = document.createElement('label');
+                        emailLabel.textContent = 'Email:';
+                        let emailField = document.createElement('input');
+                        emailField.setAttribute('type', 'email');
+                        emailField.setAttribute('name', 'email');
+                        let submit = document.createElement('button');
+                        submit.textContent = 'Submit';
+                        submit.setAttribute('id', 'submitSchedule'); 
+
+                        let form = document.createElement('form'); 
+                        [heading, labelSchedule, select, emailLabel, emailField, submit].forEach(el => {
+                            form.appendChild(el); 
+                        })
+                        this.formNewSchedule = form; 
+                        this.formNewStudent.insertAdjacentElement('beforebegin', form); 
+                        
+
+                    }); 
+
+
+                }
+
+                createSelectEl(data) {
+                    //needs to have nam einstead of id 
+                   let select = document.createElement('select');
+                   
+                   data.forEach(staff => {
+                    if (staff.student_email === null) {
+                        let str = `${staff.staff_id} | ${staff.date} | ${staff.time}`
+                        let option = document.createElement('option');
+                        option.textContent = str; 
+                        select.appendChild(option);  
+                    }
+
+                   }); 
+                    return select; 
+                }
+
+                createNewStudentForm() {
+            //     'h1 please provide new student detail '
+            //     e mail 
+            //     name 
+            //     Booking Sequence
+            //     subbmit button 
+            //         on submit callback () 
+                    let form = document.createElement('form');
+                    form.classList.add(hidden); 
+                    let heading = document.createElement('H1');
+                    heading.textContent = 'Please Provide New Student Details';
+                    let emailLabel = document.createElement('label');
+                    emailLabel.textContent = 'Email:';
+                    let emailField = document.createElement('input');
+                    emailField.setAttribute('type', 'email');
+                    emailField.setAttribute('name', 'email');
+                    let nameLabel = document.createElement('label');
+                    nameLabel.textContent = 'Name:';
+                    let nameField = document.createElement('input');
+                    emailField.setAttribute('type', 'text');
+                    emailField.setAttribute('name', 'name'); 
+                    let sequenceLabel = document.createElement('label');
+                    sequenceLabel.textContent = 'Booking Sequence:';
+                    let sequenceField = document.createElement('input');
+                    sequenceField.setAttribute('type', 'text');
+                    sequenceField.setAttribute('name', 'sequence');
+                    let submit = document.createElement('button');
+                    submit.textContent = 'Submit';
+                    submit.setAttribute('id', 'submitSchedule');   
+
+                    [
+                     heading, emailLabel, emailField,
+                     nameLabel, nameField, emailField,
+                     sequenceLabel, sequenceField, submit
+                    ].forEach(el => {
+                        form.appendChild(el);
+                    }); 
+                    this.formNewStudent = form; 
+                    this.contentDiv.appendChild(form); 
+
+                }
+
+            }
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            let scheduleBooking = new ScheduleBooking('/api/schedules', '/api/bookings', '/api/students', '/api/staff_members'); 
+            scheduleBooking.init(); 
+
+
+        });
+    </script>
+</head>
+<body>
+    <div id="content"></div>
+</body>
+</html>
