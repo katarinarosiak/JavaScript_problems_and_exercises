@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let request = new XMLHttpRequest(); 
+
+            request.open('GET', 'https://api.github.com/repos/rails/rails');
+            request.responseType = 'json'; 
+
+            request.addEventListener('load', () => {
+                console.log(request.status); 
+            }); 
+
+            request.send();  
+        }); 
+    </script>
+    <style>
+
+
+    </style>
+</head>
+<body>
+  <!doctype html>
+<html lang="en-US">
+  <head>
+    <title>On the River</title>
+  </head>
+  <body>
+    <form action="google.com" method="post">
+      <input type="hidden" name="a_hidden_input"/>
+      <input type="text" name="a_text_input"/>
+      <input type="submit" value="Submit"/>
+    </form>
+  </body>
+</html>
+</body>
+</html>

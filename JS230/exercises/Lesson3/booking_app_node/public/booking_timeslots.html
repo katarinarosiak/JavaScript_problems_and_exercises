@@ -148,7 +148,10 @@
                     this.formNewStudent = null;
                     this.formNewSchedule = null; 
                     this.contentDiv = null; 
-                    this.initUI()
+                    this.staffData = null;
+                    
+                    this.initUI();
+
                 }
 
                 initUI () {
@@ -160,16 +163,13 @@
 
                     this.contentDiv = document.querySelector('#content');
 
-                    let request = new XMLHttpRequest();
-                    request.open('GET', `http://localhost:3001${this.availableSchedulesPath}`);
-                    request.responseType = 'json';
+                    this.fetchData(this.availableSchedulesPath, (event) => {
+                        let request = event.currentTarget; 
 
-                    request.addEventListener('load', () => {
+
                         this.createScheduleForm(request.response);
                         this.createNewStudentForm();  
-
-                    }); 
-                    request.send(); 
+                    })
                 }
 
                 fetchData(path, callback) {
@@ -183,86 +183,124 @@
                     request.send(); 
                 }
 
+                postData(data, path, callback) {
+                    let request = new XMLHttpRequest();
+                    
+                    request.open('POST', `http://localhost:3001${path}`); 
+
+                    request.addEventListener('load', callback); 
+                    request.send(data); 
+
+                }
+
                 createScheduleForm(data) {
 
-                    this.fetchData(this.getAllMembersPath, (response) => {
+                    this.fetchData(this.getAllMembersPath, (event) => {
+                        let membersData = event.target.response; 
+                        this.staffData = membersData;
                         let heading = document.createElement('H1');
                         heading.textContent = 'Schedules';
+
                         let labelSchedule = document.createElement('label');
                         labelSchedule.textContent = ' Please select one schedule:'
+
                         //createSelect need to take the response and use it to select 
-                        let select = this.createSelectEl(data);
+                        let select = this.createSelectEl(data, membersData);
+                        select.setAttribute('name', 'id');
+                        select.setAttribute('id', 'select');
+
                         let emailLabel = document.createElement('label');
                         emailLabel.textContent = 'Email:';
                         let emailField = document.createElement('input');
-                        emailField.setAttribute('type', 'email');
-                        emailField.setAttribute('name', 'email');
+                        emailField.setAttribute('type', 'student_email');
+                        emailField.setAttribute('name', 'student_email');
+
                         let submit = document.createElement('button');
                         submit.textContent = 'Submit';
-                        submit.setAttribute('id', 'submitSchedule'); 
-
+                        submit.setAttribute('id', 'submitSchedule');
+ 
                         let form = document.createElement('form'); 
                         [heading, labelSchedule, select, emailLabel, emailField, submit].forEach(el => {
                             form.appendChild(el); 
                         })
+
+                        form.addEventListener('submit', this.bookSchedule.bind(this)); 
                         this.formNewSchedule = form; 
                         this.formNewStudent.insertAdjacentElement('beforebegin', form); 
                         
 
                     }); 
 
-
                 }
 
-                createSelectEl(data) {
+                createSelectEl(data, membersData) {
                     //needs to have nam einstead of id 
                    let select = document.createElement('select');
+                   let optionsArr = this.createOptionData(data, membersData);
                    
-                   data.forEach(staff => {
-                    if (staff.student_email === null) {
-                        let str = `${staff.staff_id} | ${staff.date} | ${staff.time}`
+                   optionsArr.forEach(arr => {
                         let option = document.createElement('option');
-                        option.textContent = str; 
+                        option.setAttribute('value', arr[1]); 
+                        option.textContent = arr[0]; 
                         select.appendChild(option);  
-                    }
-
                    }); 
                     return select; 
                 }
 
+                createOptionData(data, membersData) {
+
+                    return  data.filter(dataObj => {
+                        return dataObj.student_email
+                        }).map(staffObj => {
+                            let staffNameObj = {};
+
+                            let id = staffObj.staff_id;
+                            let currentStaff = membersData.find(obj => obj.id === id);
+                            staffNameObj['staff_name'] = currentStaff.name;
+                            staffNameObj.date = staffObj.date;
+                            staffNameObj.time = staffObj.time
+                            staffNameObj.id = id;
+                            
+                            return staffNameObj;
+                        }).map(staffObj => {
+                            return [`${staffObj.staff_name} | ${staffObj.date} | ${staffObj.time}`, staffObj.id];
+                        })
+                }
+
                 createNewStudentForm() {
-            //     'h1 please provide new student detail '
-            //     e mail 
-            //     name 
-            //     Booking Sequence
-            //     subbmit button 
-            //         on submit callback () 
+
                     let form = document.createElement('form');
-                    form.classList.add(hidden); 
+                    form.classList.add('hidden'); 
+
                     let heading = document.createElement('H1');
                     heading.textContent = 'Please Provide New Student Details';
+
                     let emailLabel = document.createElement('label');
                     emailLabel.textContent = 'Email:';
                     let emailField = document.createElement('input');
                     emailField.setAttribute('type', 'email');
                     emailField.setAttribute('name', 'email');
+
                     let nameLabel = document.createElement('label');
                     nameLabel.textContent = 'Name:';
                     let nameField = document.createElement('input');
-                    emailField.setAttribute('type', 'text');
-                    emailField.setAttribute('name', 'name'); 
+                    nameField.setAttribute('type', 'text');
+                    nameField.setAttribute('name', 'name');
+
                     let sequenceLabel = document.createElement('label');
                     sequenceLabel.textContent = 'Booking Sequence:';
                     let sequenceField = document.createElement('input');
                     sequenceField.setAttribute('type', 'text');
-                    sequenceField.setAttribute('name', 'sequence');
+                    sequenceField.setAttribute('name', 'booking_sequence');
+
                     let submit = document.createElement('button');
                     submit.textContent = 'Submit';
                     submit.setAttribute('id', 'submitSchedule');   
 
+
                     [
                      heading, emailLabel, emailField,
-                     nameLabel, nameField, emailField,
+                     nameLabel, nameField,
                      sequenceLabel, sequenceField, submit
                     ].forEach(el => {
                         form.appendChild(el);
@@ -270,6 +308,57 @@
                     this.formNewStudent = form; 
                     this.contentDiv.appendChild(form); 
 
+                }
+
+                bookSchedule(event) {
+                    event.preventDefault(); 
+
+                    let data = new FormData(event.target);
+
+                    this.postData(data, this.createSchedulePath, (event) => {
+                        let request = event.currentTarget;
+                        if (request.status !== 204) {
+                            alert(request.response);
+                            let bookingSequence = request.response.match(/\b[0-9]+\b/g)[0]
+ 
+                            this.formNewStudent.classList.remove('hidden');
+   
+                            this.autocompleteFormData(bookingSequence, data.get('student_email'));
+                            this.formNewStudent.addEventListener('submit', this.createStudent.bind(this));  
+                        } else {
+                            alert('Your schedule has been created successfully!');
+                        }
+                    })
+
+                 }
+
+                autocompleteFormData(sequence, email) {
+                    this.formNewStudent.children[6].value = sequence;
+                    this.formNewStudent.children[2].value = email;
+                }
+
+                createStudent(event) {
+                    event.preventDefault();
+
+                    let data =  new FormData(this.formNewStudent);
+
+                    this.postData(data, this.createStudentPath, (event) => {
+                        let request = event.target;
+                        if (request.status === 201) {
+                            alert(request.response); 
+                        } else {
+                            alert(request.response);
+                        }
+                    })
+                }
+
+                formDataToJson(formData) {
+                    const json = {};
+                    for (const pair of formData.entries()) {
+                        json[pair[0]] = pair[1];
+                    }
+
+                    return json;
                 }
 
             }
@@ -287,3 +376,37 @@
     <div id="content"></div>
 </body>
 </html>
+
+
+
+
+<!-- [
+    {"id":1,"staff_id":1,"student_email":null,"date":"07-01-18","time":"06:10"},
+    {"id":2,"staff_id":1,"student_email":null,"date":"07-02-18","time":"06:20"},
+    {"id":3,"staff_id":1,"student_email":"marquise@jacobi.info","date":"07-03-18","time":"06:30"},
+    {"id":4,"staff_id":2,"student_email":null,"date":"08-01-18","time":"07:10"},
+    {"id":5,"staff_id":2,"student_email":"keaton@morar.io","date":"08-02-18","time":"07:20"},
+    {"id":6,"staff_id":3,"student_email":null,"date":"09-01-18","time":"08:10"},
+    {"id":7,"staff_id":3,"student_email":"aniya@dachkuphal.biz","date":"09-02-18","time":"08:20"},
+    {"id":8,"staff_id":3,"student_email":null,"date":"09-03-18","time":"08:30"},
+    {"id":9,"staff_id":3,"student_email":null,"date":"09-04-18","time":"08:40"},
+    {"id":10,"staff_id":"sfrefr","student_email":null,"date":"2022-02-09","time":"15:25"},
+    {"id":11,"staff_id":"sfrefr","student_email":null,"date":"2022-02-07","time":"17:23"},
+    {"id":12,"staff_id":"sfrefr","student_email":null,"date":"2022-02-09","time":"18:24"}]
+
+
+
+[
+    {"id":1,"name":"Fae Kassulke V","email":"ewald@mills.com"},
+    {"id":2,"name":"Aaron Nitzsche","email":"kali@rosenbaumtremblay.biz"},
+    {"id":3,"name":"Gia Rice","email":"steve_marvin@bergnaum.co"},
+    {"id":4,"name":"Esperanza Doyle","email":"jacques@monahanboehm.org"},
+    {"id":5,"name":"Lacey Kautzer I","email":"gina.harber@ruelturner.io"},
+    {"id":6,"name":"Katarina","email":"katarinarosiak@gmail.com"},
+    {"id":7,"name":"Katarina","email":"katarinarosiak@gmail.com"},
+    {"id":8,"name":"Katarina","email":"katarinarosiak@gmail.com"},
+    {"id":9,"name":"Katarina","email":"katarinarosiak@gmail.com"},
+    {"id":10,"name":"Katarina","email":"katarinarosiak@gmail.com"},
+    {"id":11,"name":"item1","email":"katarinarosiak@gmail.com"},
+    {"id":12,"name":"Red Pennn","email":"katarinarosiak@gmail.com"},
+    {"id":13,"name":"Red Pennn","email":"katarinarosiak@gmail.com"}] -->

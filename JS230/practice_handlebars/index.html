@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Handlebars</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"></script>
+  <script src="main.js"></script>
+</head>
+
+<body>
+  <div class="page-wrap">
+    <h1>Handlebars</h1>
+  </div>
+  <div id="test1">
+    <ul id="test"></ul>
+  </div>
+  <script id="productTemplate" type="text/x-handlebars">
+    {{#each items}}
+    <li>
+      <h3>{{name}}</h3>
+      <h4>Index: {{@index}}</h4>
+      <dl>
+        <dt>Quantity:</dt>
+        <dd>{{quantity}}</dd>
+        <dt>Price:</dt>
+        <dd>
+          ${{price}}
+          {{#if on_sale}}
+          <strong>SALE!</strong>
+          {{/if}}
+        </dd>
+      </dl>
+    </li>
+    {{/each}}
+  </script>
+</body>
+
+</html>

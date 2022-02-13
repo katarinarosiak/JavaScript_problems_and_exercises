@@ -1,0 +1,163 @@
+<body>
+    <h1>Schedules</h1>
+    <form action="/api/bookings" method="POST" id="bookingForm">
+      <dl>
+        <dt>
+          <label for="id">Please select one schedule</label>
+        </dt>
+        <dd>
+          <select name="id" id="schedules" class="hidden"></select><span id="pleaseWait">(schedules are being retrieved...)</span>
+        </dd>
+        <dt>
+          <label for="student_email">email</label>
+        </dt>
+        <dd>
+          <input type="email" name="student_email" id="bookingFormEmail">
+        </dd>
+      </dl>
+      <input type="submit" value="Submit">
+    </form>
+    <div id="newStudent" class="hidden">
+      <h1>Please provide new student details</h1>
+      <form action="/api/students" method="POST" id="studentForm">
+        <dl>
+          <dt>
+            <label for="email">Email:</label>
+          </dt>
+          <dd>
+            <input type="email" name="email" id="studentFormEmail">
+          </dd>
+          <dt>
+            <label for="name">Name:</label>
+          </dt>
+          <dd>
+            <input type="text" name="name">
+          </dd>
+          <dt>
+            <label for="booking_sequence">Booking sequence:</label>
+          </dt>
+          <dd>
+            <input type="text" name="booking_sequence" id="bookingSequence" readonly>
+          </dd>
+        </dl>
+        <input type="submit" value="Submit">
+      </form>
+    </div>
+  </body>
+  
+  <script>
+    function createSchedulesSelection(select) {
+      function createOption(schedule, staff) {
+        let option = document.createElement("option");
+        option.setAttribute("value", schedule.id);
+        option.innerText = staff.find(member => member.id === schedule.staff_id).name + " | "
+                         + schedule.date + " | " + schedule.time;
+        return option;
+      }
+  
+      select.innerHTML = ""; // Clear out existing before generating new select menu
+  
+      let freeSchedules;
+      let staff;
+  
+      let schedulesRequest = new XMLHttpRequest();
+      schedulesRequest.open("GET", "/api/schedules");
+  
+      let staffRequest = new XMLHttpRequest();
+      staffRequest.open("GET", "/api/staff_members");
+  
+      schedulesRequest.onloadend = () => {
+        staffRequest.send();
+      }
+  
+      staffRequest.onloadend = () => {
+        freeSchedules = JSON.parse(schedulesRequest.response)
+                            .filter(schedule => !schedule.student_email);
+        staff = JSON.parse(staffRequest.response);
+  
+        freeSchedules.forEach(schedule => {
+          let option = createOption(schedule, staff);
+          select.append(option);
+        });
+  
+        document.getElementById("pleaseWait").classList.toggle("hidden");
+        select.classList.toggle("hidden");
+      }
+  
+      schedulesRequest.send();
+    }
+  
+  
+    function updateForm(form) {
+      form.reset();
+      let select = document.getElementById("schedules");
+      select.classList.toggle("hidden");
+      document.getElementById("pleaseWait").classList.toggle("hidden");
+      createSchedulesSelection(select);
+    }
+  
+  
+    function handleBookingSubmission(form) {
+      let data = new FormData(form);
+  
+      let submitRequest = new XMLHttpRequest();
+      submitRequest.open("POST", "/api/bookings");
+  
+      submitRequest.onloadend = () => {
+        if (submitRequest.status === 204) {
+          alert("Booked");
+          updateForm(form);
+        }
+  
+        if (submitRequest.status === 404 & submitRequest.responseText.startsWith("Student")) {
+          alert(submitRequest.responseText);
+          document.getElementById("studentFormEmail").value = document.getElementById("bookingFormEmail").value;
+          document.getElementById("bookingSequence").value = submitRequest.responseText.split(" ").reverse()[0];
+          document.getElementById("newStudent").classList.toggle("hidden");
+        }
+      }
+  
+      submitRequest.send(data);
+    }
+  
+  
+    function handleStudentSubmission(form) {
+      let data = new FormData(form);
+  
+      let submitRequest = new XMLHttpRequest();
+      submitRequest.open("POST", "/api/students");
+  
+      submitRequest.onloadend = () => {
+        if (submitRequest.response.status % 100 === 4) {
+          alert(submitRequest.responseText);
+        }
+  
+        if (submitRequest.status === 201) {
+          alert(submitRequest.responseText);
+          document.getElementById("bookingFormEmail").value = document.getElementById("bookingFormEmail").value;
+          handleBookingSubmission(document.getElementById("bookingForm"));
+          document.getElementById("newStudent").classList.toggle("hidden");
+        }
+      }
+  
+      submitRequest.send(data);
+    }
+  
+  
+    document.addEventListener("DOMContentLoaded", () => {
+      createSchedulesSelection(document.getElementById("schedules"));
+  
+      let bookingForm = document.getElementById("bookingForm");
+      let studentForm = document.getElementById("studentForm");
+  
+      bookingForm.addEventListener("submit", event => {
+        event.preventDefault();
+        handleBookingSubmission(bookingForm);
+      });
+  
+      studentForm.addEventListener("submit", event => {
+        event.preventDefault();
+        handleStudentSubmission(studentForm);
+      });
+    });
+  </script>

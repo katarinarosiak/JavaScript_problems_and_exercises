@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        /*
+            two functions 
+            1. cancelling schedules (scheduleID)
+
+            - DELETE to /api/schedules/:schedule_id
+            send the DELET request to /api/schedules/:schedule_id
+
+
+            2. cancelling bookings (bookingId)
+            - PUT to /api/bookings/:booking_id
+
+        */
+
+        function cancellSchedule(scheduleID) {
+            let request = new XMLHttpRequest(); 
+            request.open('DELETE', `http://localhost:3001${scheduleID}`); 
+
+            request.responseType = 'json'
+
+            request.addEventListener('load', event => {
+                if (request.status === 204) {
+                    alert('The schedule has been cancelled successfully');
+                } else {
+                    alert(request.response); 
+                }
+            }); 
+            request.send(); 
+        }
+
+        function cancelBooking(bookingId) {
+            let request = new XMLHttpRequest();
+            request.open('PUT' `http://localhost:3001${bookingId}`);  
+
+            request.addEventListener('load', event => {
+                if (request.status === 204) {
+                    alert('The booking has been cancelled successfully');
+                } else {
+                    alert(request.response); 
+                }
+            }); 
+
+            request.send(); 
+        }
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

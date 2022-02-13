@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .visible {
+            display: none;
+        }
+    </style>
+    <script>
+
+        class Model {
+            constructor(URL) {
+                this.dates = [];
+                this.schedules = {};
+                this.URL = URL; 
+            }
+
+            _fetchData(path, params, callback) {
+                let request = new XMLHttpRequest(); 
+                request.open('GET', `${this.URL}${path}${params}`);
+                request.responseType = 'json';
+
+                request.addEventListener('load', callback);
+                request.send(); 
+            }
+
+
+            getDatesAndSchedules(callback) {
+                this._fetchData('/api/bookings','', (event) => {
+                    this.dates = event.currentTarget.response;
+                    
+                    this.dates.forEach((date, idx) => {
+                        this._fetchData('/api/bookings/', `${date}`, event => {
+                            let request = event.currentTarget;
+                            this.schedules[date] = request.response; 
+
+                            if (idx === this.dates.length-1) {
+                                callback(); 
+                            }
+                        })
+                    })
+                })
+            }
+        }
+
+        class View {
+            constructor(data) {
+                this.div = document.querySelector('#container'); 
+                this.list = null;
+
+                this._initList();
+                this._bindOnClickListener() 
+  
+            }
+            _initList() {
+               let list = document.createElement('ul'); 
+               list.classList.add('.list');
+               this.div.appendChild(list);
+               this.list = list;  
+            }
+
+            createUI(data, container) {
+ 
+                let entries = Object.entries(data); 
+                console.log(data); 
+                entries.forEach(el => {
+
+                    let li = document.createElement('li'); 
+                    li.textContent = el[0];
+                    let ul = document.createElement('ul');
+                    ul.classList.add('visible'); 
+                    li.appendChild(ul); 
+                        el[1].forEach(dataSet => {
+                            let innerLi = document.createElement('li');
+                            innerLi.textContent = dataSet.join(' | ');
+                            ul.appendChild(innerLi);  
+                        }); 
+                    container.appendChild(li);  
+                }); 
+
+            }
+            _toggleDisplayChildren(el) {
+
+                if (el.children[0].tagName === 'UL') {
+                    let ul = el.children[0]; 
+                    ul.classList.toggle('visible');  
+                }
+            }
+
+            _bindOnClickListener() {
+                this.list.addEventListener('click', (event) => {
+
+                    if (event.target.tagName === 'LI') {
+                        this._toggleDisplayChildren(event.target); 
+                    }
+                }); 
+            }
+        }
+
+        class Controler {
+                constructor() {
+                    this.model = new Model('http://localhost:3001');
+                    this.view = new View();
+
+                    this.model.getDatesAndSchedules(() => {
+                        this.view.createUI(this.model.schedules, this.view.list); 
+                    });
+
+                }
+
+            }
+
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+
+            let controler = new Controler('http://localhost:3001');
+              
+        }); 
+
+    </script>
+</head>
+<body>
+    <div id="container"></div>
+</body>
+</html>
