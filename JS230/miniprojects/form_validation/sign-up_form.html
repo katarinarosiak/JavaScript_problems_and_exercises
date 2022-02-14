@@ -5,8 +5,37 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"></script>
+    <script type="text/javascript" src="sign_up_form.js"></script>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    
+    <div id="formContainer"></div>
+    <script type="text/x-handlebars-template" id="field">
+        <dt>
+            <label for="{{label.for}}">{{label.value}}</label>
+        </dt>
+        <dd>
+            <input id="{{this.id}}">
+            <span class="errorMessage"></span>
+        </dd>
+    </script>
+    <script type="text/x-handlebars-template" id="formTemplate">
+        <h1>{{formTitle}}</h1>
+        <section id="errorMessageField">
+            <p>{{error.message}}</p>
+        </section>
+        <section id="form_section">
+            <form id="{{id}}" action="{{action}}" method="{{method}}">
+                <fieldset>
+                    <dl>
+                        {{#each fields}}
+                        {{> field }}
+                        {{/each}}
+                    </dl>
+                </fieldset>
+            </form>
+        </section>
+    </script>
 </body>
 </html>
