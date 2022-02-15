@@ -18,3 +18,8 @@
 .errorMessage {
     color: red;
 }
+
+.submited_data {
+    border: 0.7px solid black;
+    height: 40px;
+}

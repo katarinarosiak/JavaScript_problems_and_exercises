@@ -20,6 +20,21 @@
             <span class="errorMessage"></span>
         </dd>
     </script>
+    <script type="text/x-handlebars-template" id="creditCardSpecialField">
+        <dt>
+            <label for="creditCard">{{specialFields.creditCard.label.value}}</label>
+        </dt>
+        <dd>
+            <section class="credit_card_field">
+                {{#each specialFields.creditCard.inputFields}}
+                <input id="{{attributes.id}}">
+                {{#unless (isLast attributes.id)}}
+                <span>-</span>
+                {{/unless}}
+                {{/each}}
+            </section>
+        </dd>
+    </script>
     <script type="text/x-handlebars-template" id="formTemplate">
         <h1>{{formTitle}}</h1>
         <section id="errorMessageField">
@@ -32,10 +47,39 @@
                         {{#each fields}}
                         {{> field }}
                         {{/each}}
+
+                        {{> creditCardSpecialField}}
+                        <dd>
+                            <input type="{{button.type}}" name="{{button.name}}" id="{{button.id}}" value="{{button.value}}">
+                        </dd>
                     </dl>
                 </fieldset>
             </form>
         </section>
+        <section id="submited_data">
+            <h2>Serialized Form</h2>
+            <div class="submited_data"></div>
+        </section>
     </script>
 </body>
 </html>
+
+<!-- 
+    first name and last nama cannot use letters 
+    add credit card number as 1111-1111-1111-1111
+
+    patetrn: a-zA-Z'\s
+
+    add event handler to key press event on first ad last name 
+
+    Credit card: 4 inputs: (text) but only numbers 
+    - keypress event
+    phone num only digits 
+
+
+
+    preventIncorrectChar(pattern):
+    - on key press:
+    - chekc if the value is correct with the pattern 
+    - if not set value === ''
+forts name and  -->
