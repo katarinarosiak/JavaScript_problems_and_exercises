@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"></script>
+    <script type="text/javascript" src="quiz.js"></script>
+    <link rel="stylesheet" href="quiz.css">
+</head>
+<body>
+    <!-- - rendered list
+      <div heading> 
+      - H1 Multiple Choice Quiz
+
+      form
+        fieldset
+          Partial question field: 
+          div id = question id +... =>  {each} question field 
+             p => Q${1}. Who is the author of The Hitchhiker's Guide to the Galaxy?
+             input radio answers
+             ...
+            div class errorMessage
+
+
+      
+        - submit button
+        - reset button
+    
+    - info field (correct, uncorrect, unasnwered )
+    -  -->
+    <div class="heading">
+        <h1>Multiple Choice Quiz</h1>
+    </div>
+        <script type="text/x-handlebars-template" id="questionField">
+            <div id="div{{id}}">
+                <p>
+                    Q{{id}}. {{{description}}}
+                    {{#each options}}
+                    <div>
+                        <input type="radio" name="q{{../id}}" id="{{createId}}" value="{{this}}">
+                        <label for="q{{../id}}">{{this}}</label>
+                    </div>
+                    {{/each}}
+                    <div id="answerMessage{{id}}" class="answerMessage"></div>
+                </p>
+            </div>
+        </script>
+    <div id="quizFormContainer"></div>
+        <script type="text/x-handlebars-template" id="quizForm">
+            <form action="POST" class="form" id="form">
+                <fieldset>
+                    {{# each questions}}
+                    {{> questionField}}
+                    {{/each}}
+                </fieldset>
+                <table>
+                    <tr>
+                        <th>
+                            <input type="submit" id="submit" class="active button" value="Submit Quiz">
+                        </th>
+                        <th>
+                            <button id="reset" class="button">Reset</button>
+                        </th>
+                    </tr>
+                </table>
+            </form>
+        </script>
+</body>
+</html>
