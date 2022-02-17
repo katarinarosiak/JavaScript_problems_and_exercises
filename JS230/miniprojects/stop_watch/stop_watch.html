@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"></script>
+    <script type="text/javascript" src="stop_watch.js"></script>
+    <link rel="stylesheet" href="stop_watch.css">
+</head>
+<body>
+    <div id="timerDiv"></div>
+    <script type="text/x-handlebars-template" id="timerTemplate">
+        <!-- div id=counter
+    table
+    div class=timer id=hours <span>:<span> | div  class=timer id=minutes | <span>:<span> div  class=timer id=seconds |<span>:<span> div  class=timer id=centisenconds 
+        p {{hours}}  p {{minutes}}  p {{second}} p {{centisenconds}}
+
+    div buttons: 
+        table:
+        btn start    btn reset  -->
+        <section id="counter">
+            <table>
+                <tr>
+                    <th><p id="hours">{{hours}}</p></th>
+                    <th>:</th>
+                    <th><p id="minutes">{{minutes}}<p></th>
+                    <th>:</th>
+                    <th><p id="seconds">{{seconds}}</p></th>
+                    <th>:</th>
+                    <th><p id="centisenconds">{{centisenconds}}</p></th>
+                </tr>
+            </table>
+        </section>
+        <section id="buttons">
+            <table>
+                <tr>
+                  <th><button id="startStop">Start</button></th>
+                  <th><button id="reset">Reset</button></th>
+                </tr>
+            </table>
+        </section>
+    </script>
+</body>
+</html>

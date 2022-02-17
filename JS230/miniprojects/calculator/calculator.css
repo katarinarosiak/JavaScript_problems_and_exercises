@@ -1,0 +1,48 @@
+body {
+    margin: 0px;
+    padding: 0px;
+    background-color: rgb(32, 32, 63);
+}
+
+.mainArea {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-rows: 1fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+}
+
+#calculatorContainer {
+    margin-top: 30%;
+    background-color: rgb(241, 253, 249);
+    height: 550px;
+}
+
+.screen {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(2, 1fr);
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    background-color: rgb(29, 29, 29);
+    color: aliceblue;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    grid-column-gap: 3px;
+    grid-row-gap: 3px;
+    height: 75%;
+
+}
+.buttonDiv {
+    width: 100%;
+    height: 100%;
+}
+
+.button {
+    height: 100%;
+    width: 100%;
+}

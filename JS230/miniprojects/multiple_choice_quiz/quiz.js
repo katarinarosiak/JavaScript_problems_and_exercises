@@ -54,7 +54,6 @@ class View {
         let formHTML = Handlebars.compile(document.querySelector("#quizForm").innerHTML);   
         let formtemplate = formHTML(this.quizData); 
 
-        console.log(formtemplate); 
         quizFormContainer.innerHTML = formtemplate;
 
     }
