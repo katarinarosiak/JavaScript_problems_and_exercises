@@ -167,6 +167,14 @@ A:
 
 */
 class Model {
+    constructor() {
+        this.currentEntry = "";
+        this.previousEntry = "";
+        this.currentOperation = "";
+        this.currentOperationSign = "";
+        this.operationWindowVal = "0";
+        this.entryWindowVal = "";
+    }
 
     calculateResult(previousVal,currentOperationSign, entryVal) {
         //
@@ -176,9 +184,22 @@ class Model {
         */
     }
 
+    determineEntryWindowVal(event) {
+        console.log(event.target.id); 
+        this.curentEntry = event.target.id;
+        if (this.entryWindowVal === '0') {
+            this.entryWindowVal = this.curentEntry;
+        } else {
+            this.entryWindowVal += this.curentEntry;
+        }
+    }
+
 }
 
 class View {
+    constructor() {
+         
+    }
 
 
 
@@ -186,7 +207,20 @@ class View {
         let calculatorContainer = document.querySelector('#calculatorContainer');
         let calculatorTemplate = Handlebars.compile(document.querySelector('#calculatorTemplate').innerHTML);  
     
-        calculatorContainer.innerHTML = calculatorTemplate(calculator); 
+        calculatorContainer.innerHTML = calculatorTemplate(calculator);
+        
+        this.buttonDiv = document.querySelector('.buttons'); 
+        this.operationWindow = document.querySelector('#operationWindow');
+        this.entryWindow = document.querySelector('#entryWindow'); 
+    }
+
+    updateUI(screenData) {
+        ///update only whats needed!!! 
+
+        this.operationWindow.textContent = screenData.operationWindowVal;
+        this.entryWindow.textContent = screenData.entryWindowVal; 
+
+
     }
 }
 
@@ -195,20 +229,108 @@ class Controler {
         this.calculator = calculator;
         this.model = new Model(); 
         this.view = new View ();
-        this.currentEntry = "";
-        this.currentOperation = "";
-        this.currentOperationSign = "";
+
     }
 
     init() {
-        this.view.initUI(this.calculator); 
-
-        let buttonDiv = document.querySelector('.buttons');
-        buttonDiv.addEventListener('click', this._delegateTask); 
+        this.view.initUI(this.calculator);
+        
+        this.view.buttonDiv.addEventListener('click', this._delegateTask.bind(this)); 
+ 
     }
 
-    _delegateTask() {
+    _getScreenData() {
+        let screenData = {}; 
+        screenData.operationWindowVal = this.model.operationWindowVal;
+        screenData.entryWindowVal = this.model.entryWindowVal;
         
+        return screenData; 
+    }
+
+    _delegateTask(event) {
+
+        // check classN
+
+        // case: digitBtn
+        //     this.entryWindow value =  determineNewEntryWindowVal(event)
+        //     this.view.updateUI( this.entryWindow value, =0); 
+        // case: operationBtn
+        //     get the event key and concat with operationWindowVal
+        //     set currentOperationSign
+        //     entryWindowVal = calculateResult(previousVal, operationsign, currentVal) (M)
+        //     - take the value from the entryWindow
+        //     - perform operation
+                
+        //     - return the result of the operation 
+        //     - assign it to the entry window value
+             
+    
+        //     updateUI:
+        //     this.view.updateUI( this.entryWindow value, =0);  (V) 
+        //     - use the value to update entry window val 
+        //     - concat this value with the opration sign 
+    
+        // case CE 
+        //     clearEntryWindow()  (C)
+        //         this.entryWindowVal = 0; 
+        //         updateUI()
+        // case C
+        //     clearEntryWindow()
+        //     clearOperationWindow() (C)
+        //         operationWindow = "";
+        //         updateUI() 
+        // case NEG
+        //     if entry 0 => do nothing 
+        //     else:
+        //     append '-' at the beginning of entryVal 
+    
+        // case =
+        //     entryWindowVal = calculateResult
+        //     clearOperationWindow()
+        //     updateUI
+        let classN = event.target.classList[1];
+        
+        switch(classN) {
+            case 'digitBtn':
+                this.model.determineEntryWindowVal(event)
+                console.log(this._getScreenData()); 
+                this.view.updateUI(this._getScreenData()); 
+              break;
+            case 'operationBtn':
+                /*
+                    model.currentOperationSign = event...id
+                    get the event id and concat with operationWindowVal
+
+
+
+
+                */
+                //     get the event id and concat with operationWindowVal
+                //     set currentOperationSign
+                //     entryWindowVal = calculateResult(previousVal, operationsign, currentVal) (M)      
+                        
+                //     - set the cuurentVal the result of the operation 
+                //     - assign it to the entry window value 
+                let currentValue = event.target.id;
+                this.model.currentOperationSign = currentValue; 
+                this.model.operationWindowVal += currentValue;
+
+                this.view.updateUI(this._getScreenData());
+              break;
+            case 'clearEntrybtn':
+                console.log(event.target); 
+              break;
+            case 'clearbtn':
+                console.log(event.target); 
+              break;
+            case 'negateBtn':
+              break;
+            case 'resultBtn':
+                console.log(event.target); 
+              break;
+            default:
+              console.log('something went wrong'); 
+          }
     }
 }
 
@@ -222,7 +344,7 @@ document.addEventListener('DOMContentLoaded', () => {
             {id:'7', classN: 'digitBtn'}, {id:'8', classN:'digitBtn'}, {id:'9', classN:'digitBtn'}, {id:'X', classN:'operationBtn'},
             {id:'4', classN:'digitBtn'}, {id:'5', classN:'digitBtn'}, {id:'6', classN:'digitBtn'}, {id:'-', classN:'operationBtn'},
             {id:'1', classN:'digitBtn'}, {id:'2', classN:'digitBtn'}, {id:'3', classN:'digitBtn'}, {id:'+', classN:'operationBtn'},
-            {id:'0', classN:'digitBtn'}, {id:'-', classN:'operationBtn'}, {id:'%', classN:'operationBtn'}, {id:'=', classN:'resultBtn'}
+            {id:'0', classN:'digitBtn'}, {id:'.', classN:'digitBtn'}, {id:'%', classN:'operationBtn'}, {id:'=', classN:'resultBtn'}
         ] 
     }
 
