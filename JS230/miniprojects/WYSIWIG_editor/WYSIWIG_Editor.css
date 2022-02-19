@@ -1,0 +1,29 @@
+body {
+    padding: 0;
+    margin: 0;
+    background-color: rgb(15, 59, 46);
+}
+
+
+.main {
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: 1fr 4fr 1fr;
+    grid-template-rows: 2fr 1fr 9fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    text-align: center;
+}
+
+
+#textField {
+    background-color: rgb(236, 236, 236);
+}
+
+#comandButtons {
+    background-color: rgb(155, 155, 155);
+}
+
+#heading {
+    background-color: rgb(155, 155, 155); 
+}
